@@ -1,0 +1,6 @@
+{
+	"appId": "io.ionic.starter",
+	"appName": "drive_app_user",
+	"webDir": "dist",
+	"bundledWebRuntime": false
+}

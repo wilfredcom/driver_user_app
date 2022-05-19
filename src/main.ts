@@ -19,14 +19,21 @@ import '@ionic/vue/css/text-alignment.css';
 import '@ionic/vue/css/text-transformation.css';
 import '@ionic/vue/css/flex-utils.css';
 import '@ionic/vue/css/display.css';
-
+import './index.css'
 /* Theme variables */
 import './theme/variables.css';
+import store from './store'
 
+declare global {
+    interface Window {
+        initMap: any;
+    }
+}
 const app = createApp(App)
-  .use(IonicVue)
-  .use(router);
-  
+    .use(store)
+    .use(IonicVue)
+    .use(router);
+
 router.isReady().then(() => {
-  app.mount('#app');
+    app.mount('#app');
 });

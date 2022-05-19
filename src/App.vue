@@ -15,14 +15,14 @@
             </ion-menu-toggle>
           </ion-list>
   
-          <ion-list id="labels-list">
+         <!--  <ion-list id="labels-list">
             <ion-list-header>Labels</ion-list-header>
   
             <ion-item v-for="(label, index) in labels" lines="none" :key="index">
               <ion-icon slot="start" :ios="bookmarkOutline" :md="bookmarkSharp"></ion-icon>
               <ion-label>{{ label }}</ion-label>
             </ion-item>
-          </ion-list>
+          </ion-list> -->
         </ion-content>
       </ion-menu>
       <ion-router-outlet id="main-content"></ion-router-outlet>
@@ -34,7 +34,7 @@
 import { IonApp, IonContent, IonIcon, IonItem, IonLabel, IonList, IonListHeader, IonMenu, IonMenuToggle, IonNote, IonRouterOutlet, IonSplitPane } from '@ionic/vue';
 import { defineComponent, ref } from 'vue';
 import { useRoute } from 'vue-router';
-import { archiveOutline, archiveSharp, bookmarkOutline, bookmarkSharp, heartOutline, heartSharp, mailOutline, mailSharp, paperPlaneOutline, paperPlaneSharp, trashOutline, trashSharp, warningOutline, warningSharp } from 'ionicons/icons';
+import { archiveOutline, archiveSharp, bookmarkOutline, bookmarkSharp, heartOutline, heartSharp, mailOutline, mailSharp, paperPlaneOutline, paperPlaneSharp, trashOutline, trashSharp, warningOutline, warningSharp, home, speedometer, cash, lockOpen, locate } from 'ionicons/icons';
 
 export default defineComponent({
   name: 'App',
@@ -56,43 +56,49 @@ export default defineComponent({
     const selectedIndex = ref(0);
     const appPages = [
       {
-        title: 'Inbox',
-        url: '/folder/Inbox',
-        iosIcon: mailOutline,
-        mdIcon: mailSharp
+        title: 'Home',
+        url: '/folder/home',
+        iosIcon: home,
+        mdIcon: home
       },
       {
-        title: 'Outbox',
+        title: 'Mis viajes',
+        url: '/folder/mis_viajes',
+        iosIcon: speedometer,
+        mdIcon: speedometer
+      },
+      {
+        title: 'Mi billetera',
         url: '/folder/Outbox',
-        iosIcon: paperPlaneOutline,
-        mdIcon: paperPlaneSharp
+        iosIcon: cash,
+        mdIcon: cash
       },
       {
-        title: 'Favorites',
+        title: 'Ayuda',
         url: '/folder/Favorites',
         iosIcon: heartOutline,
         mdIcon: heartSharp
       },
       {
-        title: 'Archived',
+        title: 'Mensajes',
         url: '/folder/Archived',
-        iosIcon: archiveOutline,
-        mdIcon: archiveSharp
+        iosIcon: mailOutline,
+        mdIcon: mailOutline
       },
       {
-        title: 'Trash',
+        title: 'Centro de  seguridad',
         url: '/folder/Trash',
-        iosIcon: trashOutline,
-        mdIcon: trashSharp
+        iosIcon: lockOpen,
+        mdIcon: lockOpen
       },
       {
-        title: 'Spam',
+        title: 'Configuración',
         url: '/folder/Spam',
-        iosIcon: warningOutline,
-        mdIcon: warningSharp
+        iosIcon: locate,
+        mdIcon: locate
       }
     ];
-    const labels = ['Family', 'Friends', 'Notes', 'Work', 'Travel', 'Reminders'];
+    const labels = ['Códigos promocionales', "Conduce con nosotros"];
     
     const path = window.location.pathname.split('folder/')[1];
     if (path !== undefined) {
