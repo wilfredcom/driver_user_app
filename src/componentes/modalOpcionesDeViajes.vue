@@ -74,10 +74,12 @@ import {
     IonButton,
     IonPage,
     IonButtons,
-    IonTitle
+    IonTitle,
+    modalController
 } from '@ionic/vue';
 import { useStore } from 'vuex'
 import axios from 'axios'
+import import_var_envio_de_paquetes from '../componentes/modalEnvioDePaquetes.vue'
 axios.defaults.headers.common['X-Requested-With'] = 'XMLHttpRequest';
 axios.defaults.headers.common['Access-Control-Allow-Origin'] = '*';
 
@@ -104,10 +106,10 @@ export default defineComponent({
             set: (val: any) => { store.commit('setSolicitudUser', val) }
         });
 
-        let MisViajes: any = computed({
-            get: () => { return store.getters.mis_viajes },
-            set: (val: any) => { store.commit('setMisViajes', val) }
-        });
+        // let MisViajes: any = computed({
+        //     get: () => { return store.getters.mis_viajes },
+        //     set: (val: any) => { store.commit('setMisViajes', val) }
+        // });
 
         let var_computed_modalOpcionesDeViaje: any = computed({
             get: () => { return store.getters.openModalOpcionesDeViaje },
@@ -119,7 +121,14 @@ export default defineComponent({
             set: (val: any) => { store.commit('setOpenModal', val) }
         });
 
+        let var_computed_envio_de_paquetes: any = computed({
+            get: () => { return store.getters.openModalEnvioDePaquetes },
+            set: (val: any) => { store.commit('setopenModalEnvioDePaquetes', val) }
+        });
+
         const servicioSelected: any = async (data ? : any) => {
+
+            
 
             ServicioSolicitado.value.type_solicitud =  data, // taxi || envio de paquetes
             ServicioSolicitado.value.inicio_ruta_coords =  requestServices.value.inicio.LtnLng,
@@ -129,8 +138,10 @@ export default defineComponent({
             ServicioSolicitado.value.distancia_servicio =  requestServices.value.distancia ,// en kilometros/metros
             ServicioSolicitado.value.tiempo_aproximado_de_viaje =  requestServices.value.tiempo ,// minutos
             ServicioSolicitado.value.costo =  requestServices.value.costo_servicio,
-            ServicioSolicitado.value.estado =  "solicitando servicio", // solicitando servicio || servicio aceptado  || servicio iniciado || servicio finalizado 
+            ServicioSolicitado.value.estado =  "solicitando servicio"; // solicitando servicio || servicio aceptado  || servicio iniciado || servicio finalizado 
             
+            if(data == 'envio_paquete') return OpenModalEnvioDePaquetes()
+
             var_computed_modalOpcionesDeViaje.value.dismiss().then(() => {
                 var_computed_modalOpcionesDeViaje.value = null;
             });
@@ -144,9 +155,6 @@ export default defineComponent({
 
             await axios.post('https://ftrack.upwaresoft.com/api/store-solicitud', {user: JSON.stringify(ServicioSolicitado.value) })
             // getSolicitudes();
-
-            
-
         }
         // const getSolicitudes: any  = async () => {
         //     try {
@@ -162,6 +170,16 @@ export default defineComponent({
         //     }
         // }
 
+        const OpenModalEnvioDePaquetes = async () => {
+
+            var_computed_envio_de_paquetes.value = await modalController
+                .create({
+                    component: import_var_envio_de_paquetes,
+                    initialBreakpoint: 0.5,
+                    breakpoints: [0, 0.5, 1]
+                })
+            return var_computed_envio_de_paquetes.value.present();
+        }
         return {
             servicioSelected,
             requestServices,

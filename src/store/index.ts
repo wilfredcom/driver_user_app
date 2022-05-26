@@ -3,6 +3,7 @@ import { Loader } from "@googlemaps/js-api-loader"
 import { modalController } from '@ionic/vue';
 import Modal from '../componentes/modalBuscarDestino.vue'
 import ModalOpcionesDeviaje from '../componentes/modalOpcionesDeViajes.vue'
+import ModalEnvioDePaquetes from '../componentes/modalEnvioDePaquetes.vue'
 
 
 export default createStore({
@@ -43,6 +44,16 @@ export default createStore({
                 })
             return modal.present();
         },
+        openModalEnvioDePaquetes: async () => {
+            
+             const modal = await modalController
+                .create({
+                    component: ModalEnvioDePaquetes,
+                    initialBreakpoint: 0.9,
+                    breakpoints: [0, 0.5, 1]
+                })
+            return modal.present();
+        },
         modelDataRequestServices:{
             tipo_de_servicio: '',
             inicio: {
@@ -70,7 +81,7 @@ export default createStore({
             usuario_solicitado: null,
             distancia_servicio: null ,// en kilometros/metros
             tiempo_aproximado_de_viaje: null ,// minutos
-            costo: null,
+            costo: 0,
             estado: null, // solicitando servicio || servicio aceptado  || servicio iniciado || servicio finalizado 
             // meta_data: null, // los datos que se generan cuando se consulta la api de google
             paquete: { // en tal caso que sea el servicio de tipo envio de paquetes
@@ -78,7 +89,8 @@ export default createStore({
                 largo: null,
                 ancho: null,
                 peso: null,
-                descripcion: null
+                descripcion: null,
+                cantidad: 0,
             }
         },
         mis_viajes: [],
@@ -93,6 +105,7 @@ export default createStore({
         searchAddressPF: state => state.searchAddressPF,
         openModal: state  => state.openModal,
         openModalOpcionesDeViaje: state => state.openModalOpcionesDeViaje,
+        openModalEnvioDePaquetes: state => state.openModalEnvioDePaquetes,
         google: state  => state.google,
         solicitud_user: state => state.solicitud_user,
         mis_viajes: state => state.mis_viajes,
@@ -110,6 +123,9 @@ export default createStore({
         },
         setModelDataRequestServices(state, data){
             state.modelDataRequestServices = data
+        },
+        setopenModalEnvioDePaquetes(state, data){
+          state.openModalEnvioDePaquetes = data
         },
         setOpenModalOpcionesDeViaje(state, data){
           state.openModalOpcionesDeViaje = data
