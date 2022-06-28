@@ -1,9 +1,12 @@
 <template>
     <ion-header>
         <ion-toolbar class="tb-srch">
-            <ion-searchbar placeholder="Ingrese punto de partida" search-icon="map" @ionChange="geocode" v-model="searchAddressPI.name" />
-            <ion-searchbar placeholder="Ingresa el destino" search-icon="map" @ionChange="geocode2" v-model="searchAddressPF.name" />
-            <button type="button" @click="ConfirmarRuta" class=" w-full text-3xl mt-2 text-white bg-gray-800 hover:bg-gray-900 focus:outline-none focus:ring-4 focus:ring-gray-300 font-medium rounded-lg text-sm px-5 py-2.5 mr-2 mb-2 dark:bg-gray-800 dark:hover:bg-gray-700 dark:focus:ring-gray-700 dark:border-gray-700">
+            <ion-searchbar placeholder="Ingrese punto de partida" search-icon="map" @ionChange="geocode"
+                v-model="searchAddressPI.name" />
+            <ion-searchbar placeholder="Ingresa el destino" search-icon="map" @ionChange="geocode2"
+                v-model="searchAddressPF.name" />
+            <button type="button" @click="ConfirmarRuta"
+                class=" w-full text-3xl mt-2 text-white bg-gray-800 hover:bg-gray-900 focus:outline-none focus:ring-4 focus:ring-gray-300 font-medium rounded-lg text-sm px-5 py-2.5 mr-2 mb-2 dark:bg-gray-800 dark:hover:bg-gray-700 dark:focus:ring-gray-700 dark:border-gray-700">
                 CONFIRMAR
             </button>
         </ion-toolbar>
@@ -16,7 +19,8 @@
                 <ion-item>
                     <ion-label>Resultados {{ AddressListOrigin.length }} de {{ AddressListOrigin.length }}</ion-label>
                 </ion-item>
-                <ion-item v-for="(addressOrigin, ao) in AddressListOrigin" :key="ao" @click="selectedPointStarted(addressOrigin)">
+                <ion-item v-for="(addressOrigin, ao) in AddressListOrigin" :key="ao"
+                    @click="selectedPointStarted(addressOrigin)">
                     <img src="https://img.icons8.com/material-outlined/34/000000/marker-a.png" class="mr-2" />
                     <ion-label class="ml-2">
                         {{ addressOrigin.name }} <br />
@@ -31,7 +35,8 @@
                 <ion-item>
                     <ion-label>Resultados {{ AddressListDestiny.length }} de {{ AddressListDestiny.length }}</ion-label>
                 </ion-item>
-                <ion-item v-for="(addressDestiny, ad) in AddressListDestiny" :key="ad" @click="selectedPointEnd(addressDestiny)">
+                <ion-item v-for="(addressDestiny, ad) in AddressListDestiny" :key="ad"
+                    @click="selectedPointEnd(addressDestiny)">
                     <img src="https://img.icons8.com/material-outlined/34/000000/marker-b.png" class="mr-2" />
                     <ion-label>
                         {{ addressDestiny.name }} <br />
@@ -69,7 +74,7 @@ export default defineComponent({
         const AddressListDestiny: any = ref([]);
         // variable de la barra de cargando 
         const isLoadingProgresBar: any = ref(false);
-       
+
         // variable para usar el store de vuex
         const store: any = useStore();
         /* variables computadas del store */
@@ -87,17 +92,14 @@ export default defineComponent({
             get: () => { return store.getters.searchAddressPF },
             set: (val: any) => { store.commit('setsearchAddressPF', val) }
         });
-
         let var_computed_modalOpcionesDeViaje: any = computed({
             get: () => { return store.getters.openModalOpcionesDeViaje },
             set: (val: any) => { store.commit('setOpenModalOpcionesDeViaje', val) }
         });
-
         let requestServices: any = computed({
             get: () => { return store.getters.modelDataRequestServices },
             set: (val: any) => { store.commit('setModelDataRequestServices', val) }
         });
-
         let google: any = computed({
             get: () => { return store.getters.google },
             set: (val: any) => { store.commit('setGoogle', val) }
@@ -109,7 +111,7 @@ export default defineComponent({
             try {
                 isLoadingProgresBar.value = true;
                 const geocoder = new google.value.maps.Geocoder();
-                geocoder.geocode({ 'address': searchAddressPI.value.name }, function(results: any, status: any) {
+                geocoder.geocode({ 'address': searchAddressPI.value.name }, function (results: any, status: any) {
                     isLoadingProgresBar.value = true;
                     if (status == 'OK') {
                         for (let i = 0; i < results.length; i++) {
@@ -136,7 +138,7 @@ export default defineComponent({
         const geocode2: any = async () => {
             try {
                 const geocoder = new google.value.maps.Geocoder();
-                geocoder.geocode({ 'address': searchAddressPF.value.name }, function(results: any, status: any) {
+                geocoder.geocode({ 'address': searchAddressPF.value.name }, function (results: any, status: any) {
                     isLoadingProgresBar.value = true;
                     if (status == 'OK') {
                         for (let i = 0; i < results.length; i++) {
@@ -174,22 +176,22 @@ export default defineComponent({
         }
         const ConfirmarRuta: any = async () => {
             try {
-                    const directionsService = new google.value.maps.DirectionsService();
-                    const directionsRenderer = new google.value.maps.DirectionsRenderer();
-                    directionsRenderer.setMap(map.value)
+                const directionsService = new google.value.maps.DirectionsService();
+                const directionsRenderer = new google.value.maps.DirectionsRenderer();
+                directionsRenderer.setMap(map.value)
 
 
-                    directionsService.route({
-                            origin: { query: searchAddressPI.value.name },
-                            destination: { query: searchAddressPF.value.name },
-                            travelMode: google.value.maps.TravelMode.DRIVING,
-                        })
-                        .then(async (response: any) => {
-                            await directionsRenderer.setDirections(response);
-                            await SeleccionarTipoDeServicio(response)
+                directionsService.route({
+                    origin: { query: searchAddressPI.value.name },
+                    destination: { query: searchAddressPF.value.name },
+                    travelMode: google.value.maps.TravelMode.DRIVING,
+                })
+                    .then(async (response: any) => {
+                        await directionsRenderer.setDirections(response);
+                        await SeleccionarTipoDeServicio(response)
 
-                        })
-                        .catch((e: any) => openToast(e));
+                    })
+                    .catch((e: any) => openToast(e));
 
 
 
@@ -207,21 +209,21 @@ export default defineComponent({
         const SeleccionarTipoDeServicio: any = (data?: any) => {
             try {
                 requestServices.value.distancia = data.routes[0].legs[0].distance
-                
+
                 requestServices.value.tiempo = data.routes[0].legs[0].duration
-                
+
                 requestServices.value.inicio.direccion = data.routes[0].legs[0].start_address
                 requestServices.value.inicio.LtnLng = data.routes[0].legs[0].start_location.toJSON()
 
                 requestServices.value.final.direccion = data.routes[0].legs[0].end_address
                 requestServices.value.final.LtnLng = data.routes[0].legs[0].end_location.toJSON()
 
-                requestServices.value.costo_servicio = ((data.routes[0].legs[0].distance.value * 1000) / 1000 )
+                requestServices.value.costo_servicio = ((data.routes[0].legs[0].distance.value * 1000) / 1000)
 
                 OpenModalOpcionesDeViaje()
 
 
-            } catch(e) {
+            } catch (e) {
                 // statements
                 console.log(e);
             }

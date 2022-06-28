@@ -29,7 +29,20 @@
     </ion-page>
 </template>
 <script lang="ts">
-import { IonPage, IonHeader, IonToolbar, IonTitle, IonContent, IonButtons, IonMenuButton, IonList, IonListHeader, IonItem, IonLabel} from '@ionic/vue';
+import { 
+    IonPage, 
+    IonHeader, 
+    IonToolbar, 
+    IonTitle, 
+    IonContent, 
+    IonButtons, 
+    IonMenuButton, 
+    IonList, 
+    IonListHeader, 
+    IonItem, 
+    IonLabel,
+    IonIcon,
+    } from '@ionic/vue';
 // import { Storage } from '@capacitor/storage';
 import { defineComponent, computed, onMounted } from "vue";
 // import { useRouter } from "vue-router";
@@ -43,7 +56,20 @@ axios.defaults.headers.common['Access-Control-Allow-Origin'] = '*';
 
 
 export default defineComponent({
-    components: { IonHeader, IonToolbar, IonTitle, IonContent, IonPage, IonButtons, IonMenuButton, IonList, IonListHeader, IonItem, IonLabel },
+    components: { 
+        IonHeader, 
+        IonToolbar, 
+        IonTitle, 
+        IonContent, 
+        IonPage, 
+        IonButtons, 
+        IonMenuButton, 
+        IonList, 
+        IonListHeader, 
+        IonItem, 
+        IonLabel,
+        IonIcon 
+    },
     setup() {
         const store: any = useStore();
 

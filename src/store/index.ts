@@ -8,7 +8,6 @@ import ModalEnvioDePaquetes from '../componentes/modalEnvioDePaquetes.vue'
 
 export default createStore({
     state: {
-
         marker: [],
         Map: [],
         loader: new Loader({
@@ -77,8 +76,6 @@ export default createStore({
             final_ruta_coords: [],
             inicio_ruta_address: '',
             final_ruta_address: '',
-            usuario_solicitante: null,
-            usuario_solicitado: null,
             distancia_servicio: null ,// en kilometros/metros
             tiempo_aproximado_de_viaje: null ,// minutos
             costo: 0,
@@ -91,7 +88,8 @@ export default createStore({
                 peso: null,
                 descripcion: null,
                 cantidad: 0,
-            }
+            },
+            mensajes:[]
         },
         mis_viajes: [],
     },

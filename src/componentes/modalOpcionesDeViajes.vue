@@ -3,7 +3,8 @@
         <ion-header :translucent="true">
             <ion-toolbar>
                 <ion-buttons slot="end">
-                    <ion-button color="danger"><img src="https://img.icons8.com/ios/30/000000/circled-left.png" /></ion-button>
+                    <ion-button color="danger"><img src="https://img.icons8.com/ios/30/000000/circled-left.png" />
+                    </ion-button>
                 </ion-buttons>
                 <ion-title class="text-2xl"> Opciones de Viaje </ion-title>
             </ion-toolbar>
@@ -14,7 +15,8 @@
                     <ion-title size="large"></ion-title>
                 </ion-toolbar>
             </ion-header>
-            <div class="m-4 max-h-fit max-w-full  text-[#fff] p-2 shadow-[0_10px_10px_1px_rgba(0,0,0,0.3)] relative rounded-lg " >
+            <div
+                class="m-4 max-h-fit max-w-full  text-[#fff] p-2 shadow-[0_10px_10px_1px_rgba(0,0,0,0.3)] relative rounded-lg ">
                 <div class="grid grid-cols-12">
                     <div class="col-span-2">
                         <img src="https://img.icons8.com/stickers/100/000000/car-theft.png" />
@@ -24,38 +26,44 @@
                             <p>taxi</p>
                         </div>
                         <div class=" text-left divide-y uppercase text-[#cecece] text-xs font-bold align-middle mb-2 ">
-                            <p>Inicio: {{requestServices.inicio.direccion}} </p>
-                            <p>Destino: {{requestServices.final.direccion}} </p>
-                            <p>Tiempo(Aprox): {{requestServices.tiempo.text}} </p>
-                            <p>Km.: {{requestServices.distancia.text}} </p>
+                            <p>Inicio: {{ requestServices.inicio.direccion }} </p>
+                            <p>Destino: {{ requestServices.final.direccion }} </p>
+                            <p>Tiempo(Aprox): {{ requestServices.tiempo.text }} </p>
+                            <p>Km.: {{ requestServices.distancia.text }} </p>
                         </div>
                     </div>
                     <div class="col-span-12  text-[#000] align-middle text-center self-center font-bold ml-2">
-                        <button class="mt-2 mb-2 w-full  bg-green-300 p-2 rounded-xl hover:bg-green-500  text-white font-semibold" @click="servicioSelected('taxi')">
+                        <button
+                            class="mt-2 mb-2 w-full  bg-green-300 p-2 rounded-xl hover:bg-green-500  text-white font-semibold"
+                            @click="servicioSelected('taxi')">
                             <p>Solicitar</p>
                             <p> ${{ Intl.NumberFormat().format(requestServices.costo_servicio) }}</p>
                         </button>
                     </div>
                 </div>
             </div>
-            <div class="m-4 max-h-fit max-w-full  text-[#fff] p-2 shadow-[0_10px_10px_1px_rgba(0,0,0,0.3)] relative rounded-lg " >
+            <div
+                class="m-4 max-h-fit max-w-full  text-[#fff] p-2 shadow-[0_10px_10px_1px_rgba(0,0,0,0.3)] relative rounded-lg ">
                 <div class="grid grid-cols-12">
                     <div class="col-span-2 ">
-                        <img src="https://img.icons8.com/external-flaticons-lineal-color-flat-icons/64/000000/external-delivery-tools-and-material-ecommerce-flaticons-lineal-color-flat-icons-2.png" />
+                        <img
+                            src="https://img.icons8.com/external-flaticons-lineal-color-flat-icons/64/000000/external-delivery-tools-and-material-ecommerce-flaticons-lineal-color-flat-icons-2.png" />
                     </div>
                     <div class="col-span-10  mt-2 ml-2">
                         <div class=" text-left  uppercase text-[#000] text-2xl font-bold align-middle mb-5 ">
                             <p>envio de paquetes</p>
                         </div>
                         <div class=" divide-y text-left  uppercase text-[#cecece] text-xs font-bold align-middle mb-2 ">
-                            <p>Inicio: {{requestServices.inicio.direccion}} </p>
-                            <p>Destino: {{requestServices.final.direccion}} </p>
-                            <p>Tiempo(Aprox): {{requestServices.tiempo.text}} </p>
-                            <p>Km.: {{requestServices.distancia.text}} </p>
+                            <p>Inicio: {{ requestServices.inicio.direccion }} </p>
+                            <p>Destino: {{ requestServices.final.direccion }} </p>
+                            <p>Tiempo(Aprox): {{ requestServices.tiempo.text }} </p>
+                            <p>Km.: {{ requestServices.distancia.text }} </p>
                         </div>
                     </div>
                     <div class="col-span-12  text-[#000] align-middle text-center self-center font-bold ml-2">
-                        <button class="mt-2 mb-2 w-full  bg-green-300 p-2 rounded-xl hover:bg-green-500  text-white font-semibold" @click="servicioSelected('envio_paquete')">
+                        <button
+                            class="mt-2 mb-2 w-full  bg-green-300 p-2 rounded-xl hover:bg-green-500  text-white font-semibold"
+                            @click="servicioSelected('envio_paquete')">
                             <p>Solicitar</p>
                             <p> ${{ Intl.NumberFormat().format(requestServices.costo_servicio) }}</p>
                         </button>
@@ -67,6 +75,7 @@
 </template>
 <script lang="ts">
 import { defineComponent, computed } from 'vue';
+import { Storage } from '@capacitor/storage';
 import {
     IonContent,
     IonHeader,
@@ -126,21 +135,20 @@ export default defineComponent({
             set: (val: any) => { store.commit('setopenModalEnvioDePaquetes', val) }
         });
 
-        const servicioSelected: any = async (data ? : any) => {
+        const servicioSelected: any = async (data?: any) => {
 
-            
+            ServicioSolicitado.value.type_solicitud = data, // taxi || envio de paquetes
+            ServicioSolicitado.value.inicio_ruta_coords = requestServices.value.inicio.LtnLng,
+            ServicioSolicitado.value.final_ruta_coords = requestServices.value.final.LtnLng,
+            ServicioSolicitado.value.inicio_ruta_address = requestServices.value.inicio.direccion,
+            ServicioSolicitado.value.final_ruta_address = requestServices.value.final.direccion,
+            ServicioSolicitado.value.distancia_servicio = requestServices.value.distancia,// en kilometros/metros
+            ServicioSolicitado.value.tiempo_aproximado_de_viaje = requestServices.value.tiempo,// minutos
+            ServicioSolicitado.value.costo = requestServices.value.costo_servicio,
+            ServicioSolicitado.value.mensajes = [],
+            ServicioSolicitado.value.estado = "solicitando servicio"; // solicitando servicio || servicio aceptado  || servicio iniciado || servicio finalizado 
 
-            ServicioSolicitado.value.type_solicitud =  data, // taxi || envio de paquetes
-            ServicioSolicitado.value.inicio_ruta_coords =  requestServices.value.inicio.LtnLng,
-            ServicioSolicitado.value.final_ruta_coords =  requestServices.value.final.LtnLng,
-            ServicioSolicitado.value.inicio_ruta_address =  requestServices.value.inicio.direccion,
-            ServicioSolicitado.value.final_ruta_address =  requestServices.value.final.direccion,
-            ServicioSolicitado.value.distancia_servicio =  requestServices.value.distancia ,// en kilometros/metros
-            ServicioSolicitado.value.tiempo_aproximado_de_viaje =  requestServices.value.tiempo ,// minutos
-            ServicioSolicitado.value.costo =  requestServices.value.costo_servicio,
-            ServicioSolicitado.value.estado =  "solicitando servicio"; // solicitando servicio || servicio aceptado  || servicio iniciado || servicio finalizado 
-            
-            if(data == 'envio_paquete') return OpenModalEnvioDePaquetes()
+            if (data == 'envio_paquete') return OpenModalEnvioDePaquetes()
 
             var_computed_modalOpcionesDeViaje.value.dismiss().then(() => {
                 var_computed_modalOpcionesDeViaje.value = null;
@@ -153,23 +161,31 @@ export default defineComponent({
 
             requestServices.value.tipo_de_servicio = data
 
-            await axios.post('https://ftrack.upwaresoft.com/api/store-solicitud', {user: JSON.stringify(ServicioSolicitado.value) })
-            // getSolicitudes();
+            let data_service = await axios.post('https://ftrack.upwaresoft.com/api/store-solicitud', { user: JSON.stringify(ServicioSolicitado.value) })
+
+
+            await Storage.set({
+                key: 'drive-user',
+                value:  JSON.stringify({estado: ServicioSolicitado.value.estado ,id: data_service.data.data.id, s:data_service.data.data}),
+            });
         }
-        // const getSolicitudes: any  = async () => {
+
+        
+
+        // const getSolicitudes: any = async () => {
         //     try {
         //         let { data }: any = await axios('https://ftrack.upwaresoft.com/api/get-solicitudes');
-                
+
         //         for (var i = 0; i < data.length; i++) {
-        //             MisViajes.value.push({user:JSON.parse(data[i].user), creado: data[i].created_at})
+        //             MisViajes.value.push({ user: JSON.parse(data[i].user), creado: data[i].created_at })
         //         }
 
-        //     } catch(e) {
-                
+        //     } catch (e) {
+
         //         console.log(e);
         //     }
         // }
-
+        
         const OpenModalEnvioDePaquetes = async () => {
 
             var_computed_envio_de_paquetes.value = await modalController
