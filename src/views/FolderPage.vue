@@ -27,10 +27,13 @@
                                     src="https://gravatar.com/avatar/dba6bae8c566f9d4041fb9cd9ada7741?d=identicon&f=y" />
                             </ion-avatar>
                             <ion-label>
-                                <h2>Nombre: {{JSON.parse(DataAnswereService.drive).name.toUpperCase()}}</h2>
-                                <h3 style="position: relative; top: -5px;">Id: {{JSON.parse(DataAnswereService.drive).id}}</h3>
-                                <p style="position: absolute; top: 45px;">Carro: {{JSON.parse(DataAnswereService.drive).carro.toUpperCase()}} </p>
-                                <p style="position: relative; top: 6px;">Placa: {{JSON.parse(DataAnswereService.drive).placa.toUpperCase()}} </p>
+                                <h2>Nombre: {{ JSON.parse(DataAnswereService.drive).name.toUpperCase() }}</h2>
+                                <h3 style="position: relative; top: -5px;">Id:
+                                    {{ JSON.parse(DataAnswereService.drive).id }}</h3>
+                                <p style="position: absolute; top: 45px;">Carro:
+                                    {{ JSON.parse(DataAnswereService.drive).carro.toUpperCase() }} </p>
+                                <p style="position: relative; top: 6px;">Placa:
+                                    {{ JSON.parse(DataAnswereService.drive).placa.toUpperCase() }} </p>
                             </ion-label>
                         </ion-item>
                         <p style="text-align: right;" v-if="DataAnswereService.drive != null">
@@ -40,11 +43,13 @@
                             </ion-chip>
                             <ion-chip color="dark">
                                 <ion-icon name="chatbubble-ellipses-outline"></ion-icon>
-                                <ion-badge color="primary">{{ JSON.parse(DataAnswereService.drive).comentarios.length }}</ion-badge>
+                                <ion-badge color="primary">{{ JSON.parse(DataAnswereService.drive).comentarios.length }}
+                                </ion-badge>
                             </ion-chip>
                             <ion-chip color="primary">
                                 <ion-icon name="car-outline"></ion-icon>
-                                <ion-badge color="primary">{{ JSON.parse(DataAnswereService.drive).count_drives }}</ion-badge>
+                                <ion-badge color="primary">{{ JSON.parse(DataAnswereService.drive).count_drives }}
+                                </ion-badge>
                             </ion-chip>
                         </p>
                         <p style="text-align: center;">
@@ -164,7 +169,7 @@ export default defineComponent({
         let DataAnswereService: any = ref({});
         let StatusServices: any = ref('');
 
-       
+
 
         const ListenAnswere: any = async () => {
             try {
@@ -246,9 +251,9 @@ export default defineComponent({
         }
 
         const AcepteDrive = async () => {
-            try{
-                 let { data } = await axios.post('https://ftrack.upwaresoft.com/api/acepted-services-by-user', { id: DataAnswereService.value.id, driver: 'servicio aceptado' })
-            }catch(e){
+            try {
+                let { data } = await axios.post('https://ftrack.upwaresoft.com/api/acepted-services-by-user', { id: DataAnswereService.value.id, driver: 'servicio aceptado' })
+            } catch (e) {
                 console.log({ e })
             }
         }
@@ -260,7 +265,8 @@ export default defineComponent({
         onIonViewWillEnter(() => {
             initMap()
             if (DataAnswereService.value.drive == null) {
-                setInterval(() => ListenAnswere(), 2500);
+                ListenAnswere()
+                // setInterval(() => ListenAnswere(), 2500);
             }
         });
 

@@ -65,7 +65,7 @@
                             class="mt-2 mb-2 w-full  bg-green-300 p-2 rounded-xl hover:bg-green-500  text-white font-semibold"
                             @click="servicioSelected('envio_paquete')">
                             <p>Solicitar</p>
-                            <p> ${{ Intl.NumberFormat().format(requestServices.costo_servicio) }}</p>
+                            <p> ${{ Intl.NumberFormat(['ban', 'id']).format(requestServices.costo_servicio) }}</p>
                         </button>
                     </div>
                 </div>
