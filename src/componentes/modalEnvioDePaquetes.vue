@@ -186,19 +186,6 @@ export default defineComponent({
             await axios.post('https://ftrack.upwaresoft.com/api/store-solicitud', { user: JSON.stringify(ServicioSolicitado.value) })
             // getSolicitudes();
         }
-        // const getSolicitudes: any  = async () => {
-        //     try {
-        //         let { data }: any = await axios('https://ftrack.upwaresoft.com/api/get-solicitudes');
-
-        //         for (var i = 0; i < data.length; i++) {
-        //             MisViajes.value.push({user:JSON.parse(data[i].user), creado: data[i].created_at})
-        //         }
-
-        //     } catch(e) {
-
-        //         console.log(e);
-        //     }
-        // }
 
         return {
             servicioConfirmado,
