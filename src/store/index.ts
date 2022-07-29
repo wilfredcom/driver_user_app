@@ -89,9 +89,11 @@ export default createStore({
                 descripcion: null,
                 cantidad: 0,
             },
-            mensajes:[]
+            mensajes:[],
+            user_id: null
         },
         mis_viajes: [],
+        user: {},
     },
     getters: {
         modelDataRequestServices: state => state.modelDataRequestServices,
@@ -107,9 +109,13 @@ export default createStore({
         google: state  => state.google,
         solicitud_user: state => state.solicitud_user,
         mis_viajes: state => state.mis_viajes,
+        user: state => state.user
 
     },
     mutations: {
+        setUser(state, data){
+            state.user = data
+        },
         setMisViajes(state, data){
             state.mis_viajes = data
         },
