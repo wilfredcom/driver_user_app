@@ -78,9 +78,9 @@ export default defineComponent({
         // variable para usar el store de vuex
         const store: any = useStore();
         /* variables computadas del store */
-        let map: any = computed({
+        const map: any = computed({
             get: () => { return store.getters.Map },
-            set: (val: any) => { store.commit('setMap', val) }
+            set: (val) => { store.commit('setMap', val) }
         });
 
         // variables para consultar las direcciones en las apis
@@ -176,6 +176,7 @@ export default defineComponent({
         }
         const ConfirmarRuta: any = async () => {
             try {
+
                 const directionsService = new google.value.maps.DirectionsService();
                 const directionsRenderer = new google.value.maps.DirectionsRenderer();
                 directionsRenderer.setMap(map.value)
@@ -192,14 +193,6 @@ export default defineComponent({
 
                     })
                     .catch((e: any) => openToast(e));
-
-
-
-                // if (modalPrincipal.value) {
-                //     modalPrincipal.value.dismiss().then(() => {
-                //         modalPrincipal.value = null;
-                //     });
-                // }
 
             } catch (error) {
                 openToast(error)
@@ -228,7 +221,6 @@ export default defineComponent({
                 console.log(e);
             }
         }
-
         /* triggers de ionics */
         const openToast: any = async (err: any = null) => {
             const toast = await toastController

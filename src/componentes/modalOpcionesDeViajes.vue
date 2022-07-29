@@ -84,7 +84,8 @@ import {
     IonPage,
     IonButtons,
     IonTitle,
-    modalController
+    modalController,
+    toastController
 } from '@ionic/vue';
 import { useStore } from 'vuex'
 import axios from 'axios'
@@ -104,6 +105,10 @@ export default defineComponent({
     },
     setup() {
         const store: any = useStore();
+        // const model_servicio: any = computed({
+        //     get: () => { return store.getters.mis_viajes },
+        //     set: (val: any) => { store.commit('setSolicitudUser', val) }
+        // });
 
         let requestServices: any = computed({
             get: () => { return store.getters.modelDataRequestServices },
@@ -125,6 +130,16 @@ export default defineComponent({
             set: (val: any) => { store.commit('setOpenModalOpcionesDeViaje', val) }
         });
 
+        let User: any = computed({
+            get: () => { return store.getters.user },
+            set: (val: any) => { store.commit('setUser', val) }
+        });
+
+        let map: any = computed({
+            get: () => { return store.getters.Map },
+            set: (val: any) => { store.commit('setMap', val) }
+        });
+
         let modalPrincipal: any = computed({
             get: () => { return store.getters.openModal },
             set: (val: any) => { store.commit('setOpenModal', val) }
@@ -135,57 +150,63 @@ export default defineComponent({
             set: (val: any) => { store.commit('setopenModalEnvioDePaquetes', val) }
         });
 
-        const servicioSelected: any = async (data?: any) => {
+        const servicioSelected: any = async (dataS?: any) => {
 
-            ServicioSolicitado.value.type_solicitud = data, // taxi || envio de paquetes
-            ServicioSolicitado.value.inicio_ruta_coords = requestServices.value.inicio.LtnLng,
-            ServicioSolicitado.value.final_ruta_coords = requestServices.value.final.LtnLng,
-            ServicioSolicitado.value.inicio_ruta_address = requestServices.value.inicio.direccion,
-            ServicioSolicitado.value.final_ruta_address = requestServices.value.final.direccion,
-            ServicioSolicitado.value.distancia_servicio = requestServices.value.distancia,// en kilometros/metros
-            ServicioSolicitado.value.tiempo_aproximado_de_viaje = requestServices.value.tiempo,// minutos
-            ServicioSolicitado.value.costo = requestServices.value.costo_servicio,
-            ServicioSolicitado.value.mensajes = [],
-            ServicioSolicitado.value.estado = "solicitando servicio"; // solicitando servicio || servicio aceptado  || servicio iniciado || servicio finalizado 
+            try {
 
-            if (data == 'envio_paquete') return OpenModalEnvioDePaquetes()
+                ServicioSolicitado.value.type_solicitud = dataS, // taxi || envio de paquetes
+                ServicioSolicitado.value.inicio_ruta_coords = requestServices.value.inicio.LtnLng,
+                ServicioSolicitado.value.final_ruta_coords = requestServices.value.final.LtnLng,
+                ServicioSolicitado.value.inicio_ruta_address = requestServices.value.inicio.direccion,
+                ServicioSolicitado.value.final_ruta_address = requestServices.value.final.direccion,
+                ServicioSolicitado.value.distancia_servicio = requestServices.value.distancia,// en kilometros/metros
+                ServicioSolicitado.value.tiempo_aproximado_de_viaje = requestServices.value.tiempo,// minutos
+                ServicioSolicitado.value.costo = requestServices.value.costo_servicio,
+                // ServicioSolicitado.value.mensajes = [],
+                ServicioSolicitado.value.estado = "solicitando servicio"; // solicitando servicio || servicio aceptado  || servicio iniciado || servicio finalizado 
+                ServicioSolicitado.value.user_id = User.value.id
 
-            var_computed_modalOpcionesDeViaje.value.dismiss().then(() => {
-                var_computed_modalOpcionesDeViaje.value = null;
-            });
+                if (dataS == 'envio_paquete') return OpenModalEnvioDePaquetes()
 
-            modalPrincipal.value.dismiss().then(() => {
-                modalPrincipal.value = null;
-            });
+                var_computed_modalOpcionesDeViaje.value.dismiss().then(() => {
+                    var_computed_modalOpcionesDeViaje.value = null;
+                });
 
-
-            requestServices.value.tipo_de_servicio = data
-
-            let data_service = await axios.post('https://ftrack.upwaresoft.com/api/store-solicitud', { user: JSON.stringify(ServicioSolicitado.value) })
+                modalPrincipal.value.dismiss().then(() => {
+                    modalPrincipal.value = null;
+                });
 
 
-            await Storage.set({
-                key: 'drive-user',
-                value:  JSON.stringify({estado: ServicioSolicitado.value.estado ,id: data_service.data.data.id, s:data_service.data.data}),
-            });
+                console.log({ ServicioSolicitado })
+
+                let { data }: any = await axios.post('http://localhost:8000/api/store-servicio', { ...ServicioSolicitado.value })
+                ServicioSolicitado.value = data
+
+                await Storage.set({
+                    key: 'drive-user',
+                    value: JSON.stringify({ estado: ServicioSolicitado.value.estado, id: data.id, s: data }),
+                });
+
+            } catch (e: any)  {
+
+                
+                await map.value.setMap(null)
+
+                const toast = await toastController.create({
+                    header: "¡Error!",
+                    message: e.response.data.message,
+                    position: "top",
+                    duration: 2000,
+                    color: "danger",
+                    icon: 'alert-circle-outline'
+                });
+                await toast.present();
+            }
         }
 
-        
 
-        // const getSolicitudes: any = async () => {
-        //     try {
-        //         let { data }: any = await axios('https://ftrack.upwaresoft.com/api/get-solicitudes');
 
-        //         for (var i = 0; i < data.length; i++) {
-        //             MisViajes.value.push({ user: JSON.parse(data[i].user), creado: data[i].created_at })
-        //         }
 
-        //     } catch (e) {
-
-        //         console.log(e);
-        //     }
-        // }
-        
         const OpenModalEnvioDePaquetes = async () => {
 
             var_computed_envio_de_paquetes.value = await modalController

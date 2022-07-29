@@ -152,26 +152,31 @@ export default defineComponent({
             }
         });
 
+         let User: any = computed({
+            get: () => { return store.getters.user },
+            set: (val: any) => { store.commit('setUser', val) }
+        });
+
         const servicioConfirmado: any = async (data?: any) => {
 
 
             ServicioSolicitado.value.type_solicitud = "envio de paquetes", // taxi || envio de paquetes
-                ServicioSolicitado.value.inicio_ruta_coords = requestServices.value.inicio.LtnLng,
-                ServicioSolicitado.value.final_ruta_coords = requestServices.value.final.LtnLng,
-                ServicioSolicitado.value.inicio_ruta_address = requestServices.value.inicio.direccion,
-                ServicioSolicitado.value.final_ruta_address = requestServices.value.final.direccion,
-                ServicioSolicitado.value.distancia_servicio = requestServices.value.distancia, // en kilometros/metros
-                ServicioSolicitado.value.tiempo_aproximado_de_viaje = requestServices.value.tiempo, // minutos
-                ServicioSolicitado.value.costo = costo_final_envio_de_paquetes,
-                ServicioSolicitado.value.estado = "solicitando servicio", // solicitando servicio || servicio aceptado  || servicio iniciado || servicio finalizado 
+            ServicioSolicitado.value.inicio_ruta_coords = requestServices.value.inicio.LtnLng,
+            ServicioSolicitado.value.final_ruta_coords = requestServices.value.final.LtnLng,
+            ServicioSolicitado.value.inicio_ruta_address = requestServices.value.inicio.direccion,
+            ServicioSolicitado.value.final_ruta_address = requestServices.value.final.direccion,
+            ServicioSolicitado.value.distancia_servicio = requestServices.value.distancia, // en kilometros/metros
+            ServicioSolicitado.value.tiempo_aproximado_de_viaje = requestServices.value.tiempo, // minutos
+            ServicioSolicitado.value.costo = costo_final_envio_de_paquetes,
+            ServicioSolicitado.value.estado = "solicitando servicio", // solicitando servicio || servicio aceptado  || servicio iniciado || servicio finalizado 
 
-                ServicioSolicitado.value.paquete.alto = paquete.value.alto,
-                ServicioSolicitado.value.paquete.largo = paquete.value.largo,
-                ServicioSolicitado.value.paquete.ancho = paquete.value.ancho,
-                ServicioSolicitado.value.paquete.peso = paquete.value.peso,
-                ServicioSolicitado.value.paquete.descripcion = paquete.value.descripcion
+            ServicioSolicitado.value.paquete.alto = paquete.value.alto,
+            ServicioSolicitado.value.paquete.largo = paquete.value.largo,
+            ServicioSolicitado.value.paquete.ancho = paquete.value.ancho,
+            ServicioSolicitado.value.paquete.peso = paquete.value.peso,
+            ServicioSolicitado.value.paquete.descripcion = paquete.value.descripcion
             ServicioSolicitado.value.paquete.cantidad = paquete.value.cantidad
-
+            ServicioSolicitado.value.user_id = User.value.id
             var_computed_modalOpcionesDeViaje.value.dismiss().then(() => {
                 var_computed_modalOpcionesDeViaje.value = null;
             });
@@ -183,7 +188,7 @@ export default defineComponent({
 
             requestServices.value.tipo_de_servicio = data
 
-            await axios.post('https://ftrack.upwaresoft.com/api/store-solicitud', { user: JSON.stringify(ServicioSolicitado.value) })
+            await axios.post('http://localhost:8000/api/store-servicio', { ...ServicioSolicitado.value })
             // getSolicitudes();
         }
 

@@ -84,8 +84,8 @@
 import { defineComponent, computed, onMounted, ref } from 'vue';
 import Modal from '../componentes/modalBuscarDestino.vue'
 import { informationCircle } from 'ionicons/icons';
-import axios from 'axios'
-import { Storage } from '@capacitor/storage';
+// import axios from 'axios'
+// import { Storage } from '@capacitor/storage';
 import {
     IonChip,
     IonItem,
@@ -171,19 +171,19 @@ export default defineComponent({
 
 
 
-        const ListenAnswere: any = async () => {
-            try {
-                const { value }: any = await Storage.get({ key: 'drive-user' });
-                if (value) {
-                    var dataStorage = JSON.parse(value)
-                    StatusServices.value = dataStorage.s.estado;
-                    let { data } = await axios.post('https://ftrack.upwaresoft.com/api/get-solicitud-user', { id: dataStorage.id })
-                    DataAnswereService.value = data
-                }
-            } catch (e) {
-                console.log({ e })
-            }
-        }
+        // const ListenAnswere: any = async () => {
+        //     try {
+        //         const { value }: any = await Storage.get({ key: 'drive-user' });
+        //         if (value) {
+        //             var dataStorage = JSON.parse(value)
+        //             StatusServices.value = dataStorage.s.estado;
+        //             let { data } = await axios.post('https://ftrack.upwaresoft.com/api/get-solicitud-user', { id: dataStorage.id })
+        //             DataAnswereService.value = data
+        //         }
+        //     } catch (e) {
+        //         console.log({ e })
+        //     }
+        // }
 
         // triggers
         const openModal = async () => {
@@ -213,10 +213,10 @@ export default defineComponent({
                 navigator.geolocation.getCurrentPosition(async (data: any) => {
                     google.value = await loader.value.load();
                     const geocoder = new google.value.maps.Geocoder();
-                    // const infowindow = new google.value.maps.InfoWindow();
+                    const infowindow = new google.value.maps.InfoWindow();
                     map.value = new google.value.maps.Map(document.getElementById("map") as HTMLElement, {
                         center: { lat: data.coords.latitude, lng: data.coords.longitude },
-                        zoom: 18,
+                        zoom: 20,
                         zoomControl: false,
                         mapTypeControl: false,
                         scaleControl: false,
@@ -233,10 +233,10 @@ export default defineComponent({
                                     position: { lat: data.coords.latitude, lng: data.coords.longitude },
                                     map: map.value,
                                 });
-                                // infowindow.setContent(`${response.results[0].formatted_address}`);
+                                infowindow.setContent(`${response.results[0].formatted_address}`);
                                 searchAddressPI.value.name = response.results[0].formatted_address
                                 searchAddressPI.value.coords = response.results[0].geometry.location.toJSON()
-                                // infowindow.open(map.value, markertInitPosition.value);
+                                infowindow.open(map.value, markertInitPosition.value);
                             } else {
                                 openToast("No results found");
                             }
@@ -252,7 +252,7 @@ export default defineComponent({
 
         const AcepteDrive = async () => {
             try {
-                let { data } = await axios.post('https://ftrack.upwaresoft.com/api/acepted-services-by-user', { id: DataAnswereService.value.id, driver: 'servicio aceptado' })
+                // let { data } = await axios.post('https://ftrack.upwaresoft.com/api/acepted-services-by-user', { id: DataAnswereService.value.id, driver: 'servicio aceptado' })
             } catch (e) {
                 console.log({ e })
             }
@@ -265,7 +265,7 @@ export default defineComponent({
         onIonViewWillEnter(() => {
             initMap()
             if (DataAnswereService.value.drive == null) {
-                ListenAnswere()
+                // ListenAnswere()
                 // setInterval(() => ListenAnswere(), 2500);
             }
         });
