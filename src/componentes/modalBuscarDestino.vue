@@ -48,6 +48,7 @@
     </ion-content>
 </template>
 <script lang="ts">
+/* eslint-disable */
 import {
     IonContent,
     IonHeader,

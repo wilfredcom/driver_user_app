@@ -74,6 +74,7 @@
     </ion-page>
 </template>
 <script lang="ts">
+/* eslint-disable */
 import { defineComponent, computed } from 'vue';
 import { Storage } from '@capacitor/storage';
 import {

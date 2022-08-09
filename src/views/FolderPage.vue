@@ -81,6 +81,7 @@
     </ion-page>
 </template>
 <script lang="ts">
+/* eslint-disable */
 import { defineComponent, computed, onMounted, ref } from 'vue';
 import Modal from '../componentes/modalBuscarDestino.vue'
 import { informationCircle } from 'ionicons/icons';

@@ -69,6 +69,7 @@
     </ion-page>
 </template>
 <script lang="ts">
+/* eslint-disable */
 import { defineComponent, computed, ref } from 'vue';
 import {
     IonContent,
