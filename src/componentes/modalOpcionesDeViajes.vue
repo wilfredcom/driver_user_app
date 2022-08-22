@@ -154,6 +154,7 @@ export default defineComponent({
         const servicioSelected: any = async (dataS?: any) => {
 
             try {
+                console.log(User.value)
 
                 ServicioSolicitado.value.type_solicitud = dataS, // taxi || envio de paquetes
                 ServicioSolicitado.value.inicio_ruta_coords = requestServices.value.inicio.LtnLng,

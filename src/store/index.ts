@@ -4,8 +4,7 @@ import { modalController } from '@ionic/vue';
 import Modal from '../componentes/modalBuscarDestino.vue'
 import ModalOpcionesDeviaje from '../componentes/modalOpcionesDeViajes.vue'
 import ModalEnvioDePaquetes from '../componentes/modalEnvioDePaquetes.vue'
-
-
+ 
 export default createStore({
     state: {
         marker: [],

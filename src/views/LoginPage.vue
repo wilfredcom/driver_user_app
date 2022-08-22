@@ -50,7 +50,7 @@ import {
     IonContent,
     toastController
 } from '@ionic/vue';
-// import { Storage } from '@capacitor/storage';
+import { Storage } from '@capacitor/storage';
 import { defineComponent, ref, computed } from "vue";
 import { useRouter } from "vue-router";
 import axios from "axios";
@@ -80,6 +80,7 @@ export default defineComponent({
                 })
                 let { data }: any = await axios.post('http://localhost:8000/api/get-user', { email: model_user.value.email })
                 User.value = data
+                await Storage.set({key: "user_login", value: JSON.stringify({user: User.value})})
                 const toast = await toastController.create({
                     header: "¡Exito!",
                     message: "inicio de session con  exito",
