@@ -65,7 +65,9 @@ import { defineComponent, ref, computed } from 'vue';
 import { useStore } from 'vuex'
 import { informationCircle } from 'ionicons/icons';
 import import_var_modalObcionesDeViaje from '../componentes/modalOpcionesDeViajes.vue'
-
+var personaDepie = require('../../public/assets/icon/standing-man.png')
+var EndFlag = require('../../public/assets/icon/flag.png')
+var BlackDotPulse = require('../../public/assets/icon/black-dot-pulse.gif')
 
 export default defineComponent({
     setup() {
@@ -75,6 +77,11 @@ export default defineComponent({
         const AddressListDestiny: any = ref([]);
         // variable de la barra de cargando 
         const isLoadingProgresBar: any = ref(false);
+        let markertInitPosition: any = computed({
+            get: () => { return store.getters.markertInitPosition },
+            set: (val: any) => { store.commit('setMarkerInitPosition', val) }
+        });
+        
 
         // variable para usar el store de vuex
         const store: any = useStore();
@@ -83,7 +90,8 @@ export default defineComponent({
             get: () => { return store.getters.Map },
             set: (val) => { store.commit('setMap', val) }
         });
-
+        // variable para guardar la direccion formateada
+        const ArrayDireccionFormated: any = ref([]);
         // variables para consultar las direcciones en las apis
         let searchAddressPI: any = computed({
             get: () => { return store.getters.searchAddressPI },
@@ -105,7 +113,10 @@ export default defineComponent({
             get: () => { return store.getters.google },
             set: (val: any) => { store.commit('setGoogle', val) }
         });
-
+        let markertFinalPosition: any = computed({
+            get: () => { return store.getters.markertFinalPosition },
+            set: (val: any) => { store.commit('setMarkerFinalPosition', val) }
+        });
         /* metodos */
 
         const geocode: any = async () => {
@@ -179,9 +190,10 @@ export default defineComponent({
             try {
 
                 const directionsService = new google.value.maps.DirectionsService();
-                const directionsRenderer = new google.value.maps.DirectionsRenderer();
+                const directionsRenderer = new google.value.maps.DirectionsRenderer({ suppressMarkers: true });
                 directionsRenderer.setMap(map.value)
-
+                markertFinalPosition.value.setMap(null)
+                markertFinalPosition.value = {}
 
                 directionsService.route({
                     origin: { query: searchAddressPI.value.name },
@@ -189,7 +201,47 @@ export default defineComponent({
                     travelMode: google.value.maps.TravelMode.DRIVING,
                 })
                     .then(async (response: any) => {
+                        // for (let index = 0; index < response.routes[0].overview_path.length; index++) {
+                        //     const element = response.routes[0].overview_path[index];
+                        //     ArrayDireccionFormated.value.push(element.toJSON())
+                        // }
+
+
+                        // const flightPath = new google.value.maps.Polyline({
+                        //     path: ArrayDireccionFormated.value,
+                        //     geodesic: true,
+                        //     strokeColor: "#FF0000",
+                        //     strokeOpacity: 1.0,
+                        //     strokeWeight: 3,
+                        // });
+
+                        // flightPath.setMap(map.value);
+                       
+                        var bird_icon = {
+                            url: BlackDotPulse,
+                            size: new google.value.maps.Size(40, 40),
+                            origin: new google.value.maps.Point(0, 0),
+                            anchor: new google.value.maps.Point(20, 40),
+                        };
+
+                        var end = {
+                            url: EndFlag,
+                            size: new google.value.maps.Size(50, 50),
+                            origin: new google.value.maps.Point(0, 0),
+                            anchor: new google.value.maps.Point(5, 42),
+                        };
+
                         await directionsRenderer.setDirections(response);
+                        new google.value.maps.Marker({
+                            position: response.routes[0].overview_path[0].toJSON(),
+                            map: map.value,
+                            icon: bird_icon
+                        });
+                        new google.value.maps.Marker({
+                            position: response.routes[0].overview_path[response.routes[0].overview_path.length - 1].toJSON(),
+                            map: map.value,
+                            icon: end
+                        });
                         await SeleccionarTipoDeServicio(response)
 
                     })

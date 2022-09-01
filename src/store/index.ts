@@ -14,6 +14,7 @@ export default createStore({
             version: "weekly",
         }),
         markertInitPosition: {},
+        markertFinalPosition: {},
         searchAddressPI: {
             name: '',
             coords: null
@@ -100,6 +101,7 @@ export default createStore({
         Map: state => state.Map,
         loader: state => state.loader,
         markertInitPosition: state => state.markertInitPosition,
+        markertFinalPosition: state => state.markertFinalPosition,
         searchAddressPI: state => state.searchAddressPI,
         searchAddressPF: state => state.searchAddressPF,
         openModal: state  => state.openModal,
@@ -144,6 +146,9 @@ export default createStore({
         },
         setMarkerInitPosition(state, data){
           state.markertInitPosition = data
+        },
+        setMarkerFinalPosition(state, data){
+          state.markertFinalPosition = data
         },
         setLoader(state, data) {
             state.loader = data

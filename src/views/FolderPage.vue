@@ -85,6 +85,7 @@
 import { defineComponent, computed, onMounted, ref } from 'vue';
 import Modal from '../componentes/modalBuscarDestino.vue'
 import { informationCircle } from 'ionicons/icons';
+var BlackDotPulse = require('../../public/assets/icon/standing-man.png')
 // import axios from 'axios'
 // import { Storage } from '@capacitor/storage';
 import {
@@ -147,10 +148,7 @@ export default defineComponent({
             get: () => { return store.getters.loader },
             set: (val) => { store.commit('setLoader', val) }
         });
-        let markertInitPosition: any = computed({
-            get: () => { return store.getters.markertInitPosition },
-            set: (val: any) => { store.commit('setMarkerInitPosition', val) }
-        });
+
         let searchAddressPI: any = computed({
             get: () => { return store.getters.searchAddressPI },
             set: (val: any) => { store.commit('setsearchAddressPI', val) }
@@ -170,7 +168,10 @@ export default defineComponent({
         let DataAnswereService: any = ref({});
         let StatusServices: any = ref('');
 
-
+        let markertFinalPosition: any = computed({
+            get: () => { return store.getters.markertFinalPosition },
+            set: (val: any) => { store.commit('setMarkerFinalPosition', val) }
+        });
 
         // const ListenAnswere: any = async () => {
         //     try {
@@ -214,30 +215,28 @@ export default defineComponent({
                 navigator.geolocation.getCurrentPosition(async (data: any) => {
                     google.value = await loader.value.load();
                     const geocoder = new google.value.maps.Geocoder();
-                    const infowindow = new google.value.maps.InfoWindow();
-                    map.value = new google.value.maps.Map(document.getElementById("map") as HTMLElement, {
-                        center: { lat: data.coords.latitude, lng: data.coords.longitude },
-                        zoom: 20,
-                        zoomControl: false,
-                        mapTypeControl: false,
-                        scaleControl: false,
-                        streetViewControl: false,
-                        rotateControl: false,
-                        fullscreenControl: false
-                    });
+                    map.value = new google.value.maps.Map(document.getElementById("map") as HTMLElement,{
+                            center: { lat: data.coords.latitude, lng: data.coords.longitude },
+                            zoom: 20,
+                            zoomControl: false,
+                            mapTypeControl: false,
+                            scaleControl: false,
+                            streetViewControl: false,
+                            rotateControl: false,
+                            fullscreenControl: false
+                        });
 
                     geocoder.geocode({ location: { lat: data.coords.latitude, lng: data.coords.longitude } })
                         .then((response: any) => {
                             if (response.results[0]) {
                                 map.value.setZoom(18);
-                                markertInitPosition.value = new google.value.maps.Marker({
+                                markertFinalPosition.value = new google.value.maps.Marker({
                                     position: { lat: data.coords.latitude, lng: data.coords.longitude },
-                                    map: map.value,
+                                    icon: BlackDotPulse
                                 });
-                                infowindow.setContent(`${response.results[0].formatted_address}`);
+                                markertFinalPosition.value.setMap(map.value)
                                 searchAddressPI.value.name = response.results[0].formatted_address
                                 searchAddressPI.value.coords = response.results[0].geometry.location.toJSON()
-                                infowindow.open(map.value, markertInitPosition.value);
                             } else {
                                 openToast("No results found");
                             }

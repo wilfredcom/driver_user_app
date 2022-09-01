@@ -105,6 +105,14 @@ export default defineComponent({
         IonTitle
     },
     setup() {
+        let google: any = computed({
+            get: () => { return store.getters.google },
+            set: (val: any) => { store.commit('setGoogle', val) }
+        });
+        const loader: any = computed({
+            get: () => { return store.getters.loader },
+            set: (val) => { store.commit('setLoader', val) }
+        });
         const store: any = useStore();
         // const model_servicio: any = computed({
         //     get: () => { return store.getters.mis_viajes },
@@ -125,6 +133,10 @@ export default defineComponent({
         //     get: () => { return store.getters.mis_viajes },
         //     set: (val: any) => { store.commit('setMisViajes', val) }
         // });
+        let searchAddressPI: any = computed({
+            get: () => { return store.getters.searchAddressPI },
+            set: (val: any) => { store.commit('setsearchAddressPI', val) }
+        });
 
         let var_computed_modalOpcionesDeViaje: any = computed({
             get: () => { return store.getters.openModalOpcionesDeViaje },
@@ -154,7 +166,6 @@ export default defineComponent({
         const servicioSelected: any = async (dataS?: any) => {
 
             try {
-                console.log(User.value)
 
                 ServicioSolicitado.value.type_solicitud = dataS, // taxi || envio de paquetes
                 ServicioSolicitado.value.inicio_ruta_coords = requestServices.value.inicio.LtnLng,
@@ -178,22 +189,13 @@ export default defineComponent({
                     modalPrincipal.value = null;
                 });
 
-
-                console.log({ ServicioSolicitado })
-
                 let { data }: any = await axios.post('http://localhost:8000/api/store-servicio', { ...ServicioSolicitado.value })
-                ServicioSolicitado.value = data
 
                 await Storage.set({
                     key: 'drive-user',
                     value: JSON.stringify({ estado: ServicioSolicitado.value.estado, id: data.id, s: data }),
                 });
-
             } catch (e: any)  {
-
-                
-                await map.value.setMap(null)
-
                 const toast = await toastController.create({
                     header: "¡Error!",
                     message: e.response.data.message,
@@ -205,10 +207,6 @@ export default defineComponent({
                 await toast.present();
             }
         }
-
-
-
-
         const OpenModalEnvioDePaquetes = async () => {
 
             var_computed_envio_de_paquetes.value = await modalController
