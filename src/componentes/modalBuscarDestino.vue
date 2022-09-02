@@ -48,7 +48,7 @@
     </ion-content>
 </template>
 <script lang="ts">
-/* eslint-disable */
+
 import {
     IonContent,
     IonHeader,
@@ -65,11 +65,14 @@ import { defineComponent, ref, computed } from 'vue';
 import { useStore } from 'vuex'
 import { informationCircle } from 'ionicons/icons';
 import import_var_modalObcionesDeViaje from '../componentes/modalOpcionesDeViajes.vue'
-var personaDepie = require('../../public/assets/icon/standing-man.png')
+// var personaDepie = require('../../public/assets/icon/standing-man.png')
+// eslint-disable-next-line
 var EndFlag = require('../../public/assets/icon/flag.png')
+// eslint-disable-next-line
 var BlackDotPulse = require('../../public/assets/icon/black-dot-pulse.gif')
 
 export default defineComponent({
+    name: 'ModalDF',
     setup() {
         /*variables */
         // variables para desplejar la lista de las direcciones 
@@ -77,12 +80,6 @@ export default defineComponent({
         const AddressListDestiny: any = ref([]);
         // variable de la barra de cargando 
         const isLoadingProgresBar: any = ref(false);
-        let markertInitPosition: any = computed({
-            get: () => { return store.getters.markertInitPosition },
-            set: (val: any) => { store.commit('setMarkerInitPosition', val) }
-        });
-        
-
         // variable para usar el store de vuex
         const store: any = useStore();
         /* variables computadas del store */
@@ -91,31 +88,26 @@ export default defineComponent({
             set: (val) => { store.commit('setMap', val) }
         });
         // variable para guardar la direccion formateada
-        const ArrayDireccionFormated: any = ref([]);
         // variables para consultar las direcciones en las apis
-        let searchAddressPI: any = computed({
+        const searchAddressPI: any = computed({
             get: () => { return store.getters.searchAddressPI },
             set: (val: any) => { store.commit('setsearchAddressPI', val) }
         });
-        let searchAddressPF: any = computed({
+        const searchAddressPF: any = computed({
             get: () => { return store.getters.searchAddressPF },
             set: (val: any) => { store.commit('setsearchAddressPF', val) }
         });
-        let var_computed_modalOpcionesDeViaje: any = computed({
+        const var_computed_modalOpcionesDeViaje: any = computed({
             get: () => { return store.getters.openModalOpcionesDeViaje },
             set: (val: any) => { store.commit('setOpenModalOpcionesDeViaje', val) }
         });
-        let requestServices: any = computed({
+        const requestServices: any = computed({
             get: () => { return store.getters.modelDataRequestServices },
             set: (val: any) => { store.commit('setModelDataRequestServices', val) }
         });
-        let google: any = computed({
+        const google: any = computed({
             get: () => { return store.getters.google },
             set: (val: any) => { store.commit('setGoogle', val) }
-        });
-        let markertFinalPosition: any = computed({
-            get: () => { return store.getters.markertFinalPosition },
-            set: (val: any) => { store.commit('setMarkerFinalPosition', val) }
         });
         /* metodos */
 
@@ -146,7 +138,7 @@ export default defineComponent({
                 openToast(error)
                 console.log('Errorr:', error)
             }
-        };
+        }
         const geocode2: any = async () => {
             try {
                 const geocoder = new google.value.maps.Geocoder();
@@ -192,16 +184,13 @@ export default defineComponent({
                 const directionsService = new google.value.maps.DirectionsService();
                 const directionsRenderer = new google.value.maps.DirectionsRenderer({ suppressMarkers: true });
                 directionsRenderer.setMap(map.value)
-                markertFinalPosition.value.setMap(null)
-                markertFinalPosition.value = {}
-
                 directionsService.route({
                     origin: { query: searchAddressPI.value.name },
                     destination: { query: searchAddressPF.value.name },
                     travelMode: google.value.maps.TravelMode.DRIVING,
                 })
                     .then(async (response: any) => {
-                        // for (let index = 0; index < response.routes[0].overview_path.length; index++) {
+                        // for (const index = 0; index < response.routes[0].overview_path.length; index++) {
                         //     const element = response.routes[0].overview_path[index];
                         //     ArrayDireccionFormated.value.push(element.toJSON())
                         // }
@@ -217,14 +206,14 @@ export default defineComponent({
 
                         // flightPath.setMap(map.value);
                        
-                        var bird_icon = {
+                        const bird_icon = {
                             url: BlackDotPulse,
                             size: new google.value.maps.Size(40, 40),
                             origin: new google.value.maps.Point(0, 0),
                             anchor: new google.value.maps.Point(20, 40),
                         };
 
-                        var end = {
+                        const end = {
                             url: EndFlag,
                             size: new google.value.maps.Size(50, 50),
                             origin: new google.value.maps.Point(0, 0),
@@ -295,8 +284,6 @@ export default defineComponent({
                 })
             return var_computed_modalOpcionesDeViaje.value.present();
         }
-
-
         return {
             AddressListOrigin,
             searchAddressPI,
