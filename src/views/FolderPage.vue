@@ -127,7 +127,7 @@
       <div id="container" style="width: 100%; height: 100%; z-index: 1">
         <div id="map" class="map"></div>
         <div class="float-div-mapper">
-          <ion-button color="warning" @click="setOpen(true)" expand="block">
+          <ion-button color="warning" @click="isOpen = !isOpen" expand="block">
             ¿A donde quieres ir?
           </ion-button>
         </div>
@@ -721,6 +721,7 @@ export default defineComponent({
   },
   methods: {
     setOpen(isOpen: boolean) {
+      this.isOpen = false;
       this.isOpen = isOpen;
     },
   },
