@@ -166,7 +166,6 @@ export default defineComponent({
         const servicioSelected: any = async (dataS?: any) => {
 
             try {
-
                 ServicioSolicitado.value.type_solicitud = dataS, // taxi || envio de paquetes
                 ServicioSolicitado.value.inicio_ruta_coords = requestServices.value.inicio.LtnLng,
                 ServicioSolicitado.value.final_ruta_coords = requestServices.value.final.LtnLng,
@@ -175,19 +174,21 @@ export default defineComponent({
                 ServicioSolicitado.value.distancia_servicio = requestServices.value.distancia,// en kilometros/metros
                 ServicioSolicitado.value.tiempo_aproximado_de_viaje = requestServices.value.tiempo,// minutos
                 ServicioSolicitado.value.costo = requestServices.value.costo_servicio,
-                // ServicioSolicitado.value.mensajes = [],
+                // // ServicioSolicitado.value.mensajes = [],
                 ServicioSolicitado.value.estado = "solicitando servicio"; // solicitando servicio || servicio aceptado  || servicio iniciado || servicio finalizado 
                 ServicioSolicitado.value.user_id = User.value.id
 
-                if (dataS == 'envio_paquete') return OpenModalEnvioDePaquetes()
+                // if (dataS == 'envio_paquete') return OpenModalEnvioDePaquetes()
 
-                var_computed_modalOpcionesDeViaje.value.dismiss().then(() => {
-                    var_computed_modalOpcionesDeViaje.value = null;
-                });
+                // var_computed_modalOpcionesDeViaje.value.dismiss().then(() => {
+                    //     var_computed_modalOpcionesDeViaje.value = null;
+                // });
 
-                modalPrincipal.value.dismiss().then(() => {
-                    modalPrincipal.value = null;
-                });
+                // modalPrincipal.value.dismiss().then(() => {
+                    //     modalPrincipal.value = null;
+                // });
+                
+                console.log({ServicioSolicitado:ServicioSolicitado.value})
 
                 let { data }: any = await axios.post('http://localhost:8000/api/store-servicio', { ...ServicioSolicitado.value })
 

@@ -3,7 +3,10 @@
     <ion-header :translucent="true">
       <ion-toolbar>
         <ion-buttons slot="end">
-          <ion-menu-button color="primary" class="float-rigth"></ion-menu-button>
+          <ion-menu-button
+            color="primary"
+            class="float-rigth"
+          ></ion-menu-button>
         </ion-buttons>
         <ion-title class="font-bold text-4xl"> TE LLEVO USER</ion-title>
       </ion-toolbar>
@@ -11,14 +14,58 @@
     <ion-content :fullscreen="true">
       <div class="float-div-mapper" style="top: 10%">
         <ion-card>
-          <ion-card-header>
+          <ion-card-header
+            v-if="
+              var_computed_solicitud_usuario != null &&
+              Object.entries(var_computed_solicitud_usuario).length > 0
+            "
+          >
             <ion-card-title>Buscando Conductor</ion-card-title>
-            <ion-card-subtitle style="position: absolute; top: 25px">Buscando...</ion-card-subtitle>
-            <img src="/assets/icon/icons8-search.gif" style="position: absolute; width: 30px; right: 20px; top: 15px" />
+            <ion-card-subtitle style="position: absolute; top: 25px">
+              Buscando...
+            </ion-card-subtitle>
+            <img
+              src="/assets/icon/icons8-search.gif"
+              style="position: absolute; width: 30px; right: 20px; top: 15px"
+            />
+            <ion-list style="position: relative; top: 8px">
+              <ion-item>
+                <ion-label style="margin-left: 30px">
+                  <strong> Desde:</strong>
+                  {{ var_computed_solicitud_usuario.s.inicio_ruta_address }}
+                </ion-label>
+                <img
+                  src="/assets/icon/green-dot-pulse.gif"
+                  style="position: absolute; width: 30px; top: 9px; left: 0px"
+                />
+              </ion-item>
+              <ion-item>
+                <ion-label style="margin-left: 33px">
+                  <strong> Hasta:</strong>
+                  {{
+                    var_computed_solicitud_usuario.s.final_ruta_address
+                  }}</ion-label
+                >
+                <img
+                  src="/assets/icon/flag.png"
+                  style="position: absolute; width: 20px; top: 15px; left: 5px"
+                />
+              </ion-item>
+            </ion-list>
+            <ion-button
+              color="danger"
+              expand="block"
+              @click="DeleteIfExistRequestUser"
+            >
+              <img
+                src="https://img.icons8.com/color/18/000000/cancel--v1.png"
+              />
+              Cancelar Servicio
+            </ion-button>
           </ion-card-header>
-          <ion-card-header>
+          <!-- <ion-card-header>
             <ion-card-title>Conductor</ion-card-title>
-          </ion-card-header>
+          </ion-card-header> -->
           <!-- <ion-card-content>
             <ion-item v-if="DataAnswereService.drive != null">
               <ion-avatar slot="start">
@@ -85,102 +132,119 @@
           </ion-button>
         </div>
       </div>
-      <ion-modal :is-open="isOpen" :initial-breakpoint="0.75" :breakpoints="[0.75, 0.5, 0.75]"
-        :backdrop-breakpoint="0.5">
+      <ion-modal
+        :is-open="isOpen"
+        :initial-breakpoint="0.75"
+        :breakpoints="[0.75, 0.5, 0.75]"
+        :backdrop-breakpoint="0.5"
+      >
         <ion-header>
           <ion-toolbar>
             <ion-buttons slot="end">
               <ion-button @click="setOpen(false)">
-                <img src="https://img.icons8.com/ios/30/000000/circled-left.png" />
+                <img
+                  src="https://img.icons8.com/ios/30/000000/circled-left.png"
+                />
               </ion-button>
             </ion-buttons>
           </ion-toolbar>
         </ion-header>
         <ion-content>
           <ion-buttons slot="end">
-            <ion-button color="danger"><img src="https://img.icons8.com/ios/30/000000/circled-left.png" />
+            <ion-button color="danger"
+              ><img
+                src="https://img.icons8.com/ios/30/000000/circled-left.png"
+              />
             </ion-button>
           </ion-buttons>
-          <ion-slides :pager="false" :show-pager="false" :options="slideOpts">
-            <ion-slide>
-              <ion-card class="w-full h-24">
-                <ion-row>
-                  <ion-col size="3">
-                    <img src="https://img.icons8.com/stickers/100/000000/car-theft.png" />
-                  </ion-col>
-                  <ion-col size="9">
-                    <ion-card-header>
-                      <ion-card-title>Solicitud de Taxi</ion-card-title>
-                    </ion-card-header>
-                  </ion-col>
-                </ion-row>
-              </ion-card>
-            </ion-slide>
-            <ion-slide>
-              <ion-card class="w-full h-24">
-                <ion-row>
-                  <ion-col size="3">
-                    <img
-                            src="https://img.icons8.com/external-flaticons-lineal-color-flat-icons/64/000000/external-delivery-tools-and-material-ecommerce-flaticons-lineal-color-flat-icons-2.png" />
-                  </ion-col>
-                  <ion-col size="9">
-                    <ion-card-header>
-                      <ion-card-title>Solicitud de Envio de paquete</ion-card-title>
-                    </ion-card-header>
-                  </ion-col>
-                </ion-row>
-              </ion-card>
-            </ion-slide>
-          </ion-slides>
-          <ion-searchbar placeholder="Ingrese punto de partida" search-icon="map" @ionChange="geocode"
-            v-model="searchAddressPI.name" />
-          <ion-searchbar placeholder="Ingresa el destino" search-icon="map" @ionChange="geocode2"
-            v-model="searchAddressPF.name" />
+          <ion-searchbar
+            placeholder="Ingrese punto de partida"
+            search-icon="map"
+            @ionChange="geocode"
+            v-model="searchAddressPI.name"
+          />
+          <ion-searchbar
+            placeholder="Ingresa el destino"
+            search-icon="map"
+            @ionChange="geocode2"
+            v-model="searchAddressPF.name"
+          />
           <ion-item>
             <ion-label>Metodo de pago</ion-label>
-            <ion-select interface="popover" placeholder="Selecione metodo de pago">
+            <ion-select
+              interface="popover"
+              placeholder="Selecione metodo de pago"
+              selectedText="Efectivo"
+            >
               <IonSelectOption value="efectivo"> Efectivo</IonSelectOption>
               <IonSelectOption value="credito">Credito</IonSelectOption>
             </ion-select>
           </ion-item>
-          <button type="button" @click="ConfirmarRuta"
-            class="w-full text-3xl mt-2 text-white bg-gray-800 hover:bg-gray-900 focus:outline-none focus:ring-4 focus:ring-gray-300 font-medium rounded-lg text-sm px-5 py-2.5 mr-2 mb-2 dark:bg-gray-800 dark:hover:bg-gray-700 dark:focus:ring-gray-700 dark:border-gray-700">
+          <button
+            type="button"
+            @click="ConfirmarRuta"
+            class="w-full text-3xl mt-2 text-white bg-gray-800 hover:bg-gray-900 focus:outline-none focus:ring-4 focus:ring-gray-300 font-medium rounded-lg text-sm px-5 py-2.5 mr-2 mb-2 dark:bg-gray-800 dark:hover:bg-gray-700 dark:focus:ring-gray-700 dark:border-gray-700"
+          >
             CONFIRMAR
           </button>
           <ion-progress-bar type="indeterminate" v-show="isLoadingProgresBar" />
-          <ion-content class="ion-padding" v-if="AddressListOrigin" v-show="AddressListDestiny.length <= 0">
+          <ion-content
+            class="ion-padding"
+            v-if="AddressListOrigin"
+            v-show="AddressListDestiny.length <= 0"
+          >
             <ion-label> Origenes: </ion-label>
             <ion-list>
               <ion-item>
-                <ion-label>Resultados {{ AddressListOrigin.length }} de
-                  {{ AddressListOrigin.length }}</ion-label>
+                <ion-label
+                  >Resultados {{ AddressListOrigin.length }} de
+                  {{ AddressListOrigin.length }}</ion-label
+                >
               </ion-item>
-              <ion-item v-for="(addressOrigin, ao) in AddressListOrigin" :key="ao"
-                @click="selectedPointStarted(addressOrigin)">
-                <img src="https://img.icons8.com/material-outlined/34/000000/marker-a.png" class="mr-2" />
+              <ion-item
+                v-for="(addressOrigin, ao) in AddressListOrigin"
+                :key="ao"
+                @click="selectedPointStarted(addressOrigin)"
+              >
+                <img
+                  src="https://img.icons8.com/material-outlined/34/000000/marker-a.png"
+                  class="mr-2"
+                />
                 <ion-label class="ml-2">
                   {{ addressOrigin.name }} <br />
                   <small class="text-[#cecece] text-sm">{{
-                  addressOrigin.shortName
+                    addressOrigin.shortName
                   }}</small>
                 </ion-label>
               </ion-item>
             </ion-list>
           </ion-content>
-          <ion-content class="ion-padding" v-if="AddressListDestiny" v-show="AddressListOrigin.length <= 0">
+          <ion-content
+            class="ion-padding"
+            v-if="AddressListDestiny"
+            v-show="AddressListOrigin.length <= 0"
+          >
             <ion-label> Destinos: </ion-label>
             <ion-list>
               <ion-item>
-                <ion-label>Resultados {{ AddressListDestiny.length }} de
-                  {{ AddressListDestiny.length }}</ion-label>
+                <ion-label
+                  >Resultados {{ AddressListDestiny.length }} de
+                  {{ AddressListDestiny.length }}</ion-label
+                >
               </ion-item>
-              <ion-item v-for="(addressDestiny, ad) in AddressListDestiny" :key="ad"
-                @click="selectedPointEnd(addressDestiny)">
-                <img src="https://img.icons8.com/material-outlined/34/000000/marker-b.png" class="mr-2" />
+              <ion-item
+                v-for="(addressDestiny, ad) in AddressListDestiny"
+                :key="ad"
+                @click="selectedPointEnd(addressDestiny)"
+              >
+                <img
+                  src="https://img.icons8.com/material-outlined/34/000000/marker-b.png"
+                  class="mr-2"
+                />
                 <ion-label>
                   {{ addressDestiny.name }} <br />
                   <small class="text-[#cecece] text-sm">{{
-                  addressDestiny.shortName
+                    addressDestiny.shortName
                   }}</small>
                 </ion-label>
               </ion-item>
@@ -192,13 +256,14 @@
   </ion-page>
 </template>
 <script lang="ts">
+/* eslint-disable */
 import { defineComponent, computed, onMounted, ref } from "vue";
 import { informationCircle } from "ionicons/icons";
-// eslint-disable-next-line
-const standingMan = require("../../public/assets/icon/standing-man.png");
-// import axios from 'axios'
 import { Storage } from "@capacitor/storage";
+import { useStore } from "vuex";
+import import_var_modalObcionesDeViaje from "../componentes/modalOpcionesDeViajes.vue";
 import {
+  IonListHeader,
   // IonChip,
   IonItem,
   // IonAvatar,
@@ -228,20 +293,20 @@ import {
   modalController,
   IonSelect,
   IonSelectOption,
-  IonSlides,
-  IonSlide,
-  IonRow,
-  IonCol
+  // IonSlides,
+  // IonSlide,
+  // IonRow,
+  // IonCol,
 } from "@ionic/vue";
-import { useStore } from "vuex";
-// eslint-disable-next-line
+
 var EndFlag = require("../../public/assets/icon/flag.png");
-// eslint-disable-next-line
-var BlackDotPulse = require("../../public/assets/icon/black-dot-pulse.gif");
-import import_var_modalObcionesDeViaje from "../componentes/modalOpcionesDeViajes.vue";
+var GreenkDotPulse = require("../../public/assets/icon/green-dot-pulse.gif");
+const standingMan = require("../../public/assets/icon/standing-man.png");
+
 export default defineComponent({
   name: "FolderPage",
   components: {
+    IonListHeader,
     // IonChip,
     IonItem,
     // IonAvatar,
@@ -267,10 +332,10 @@ export default defineComponent({
     IonSearchbar,
     IonSelect,
     IonSelectOption,
-    IonSlides,
-    IonSlide,
-    IonRow,
-    IonCol
+    // IonSlides,
+    // IonSlide,
+    // IonRow,
+    // IonCol,
   },
   data() {
     return {
@@ -349,14 +414,14 @@ export default defineComponent({
         store.commit("setsearchAddressPF", val);
       },
     });
-    // const requestServices: any = computed({
-    //   get: () => {
-    //     return store.getters.modelDataRequestServices;
-    //   },
-    //   set: (val: any) => {
-    //     store.commit("setModelDataRequestServices", val);
-    //   },
-    // });
+    const requestServices: any = computed({
+      get: () => {
+        return store.getters.modelDataRequestServices;
+      },
+      set: (val: any) => {
+        store.commit("setModelDataRequestServices", val);
+      },
+    });
     const var_computed_modalOpcionesDeViaje: any = computed({
       get: () => {
         return store.getters.openModalOpcionesDeViaje;
@@ -367,14 +432,14 @@ export default defineComponent({
     });
 
     const customPopoverOptions = {
-      header: 'Metodo de pago',
-      subHeader: '',
-      message: ''
+      header: "Metodo de pago",
+      subHeader: "",
+      message: "",
     };
 
     const slideOpts = {
       initialSlide: 1,
-      speed: 400
+      speed: 400,
     };
 
     /* metodos */
@@ -457,18 +522,21 @@ export default defineComponent({
     const ConfirmarRuta: any = async () => {
       try {
         const directionsService = new google.value.maps.DirectionsService();
-        const directionsRenderer = new google.value.maps.DirectionsRenderer({ suppressMarkers: true });
+        const directionsRenderer = new google.value.maps.DirectionsRenderer({
+          suppressMarkers: true,
+        });
         directionsRenderer.setMap(map.value);
         const response = await directionsService.route({
           origin: { query: searchAddressPI.value.name },
           destination: { query: searchAddressPF.value.name },
           travelMode: google.value.maps.TravelMode.DRIVING,
-        })
+        });
+
         const start = {
-          url: BlackDotPulse,
-          size: new google.value.maps.Size(40, 40),
+          url: GreenkDotPulse,
+          size: new google.value.maps.Size(50, 50),
           origin: new google.value.maps.Point(0, 0),
-          anchor: new google.value.maps.Point(20, 40),
+          anchor: new google.value.maps.Point(20, 20),
         };
 
         const end = {
@@ -485,12 +553,14 @@ export default defineComponent({
           icon: start,
         });
         new google.value.maps.Marker({
-          position: response.routes[0].overview_path[response.routes[0].overview_path.length - 1].toJSON(),
+          position:
+            response.routes[0].overview_path[
+              response.routes[0].overview_path.length - 1
+            ].toJSON(),
           map: map.value,
           icon: end,
         });
         await SeleccionarTipoDeServicio(response);
-
       } catch (error) {
         openToast(error);
         console.log(error);
@@ -498,14 +568,18 @@ export default defineComponent({
     };
     const SeleccionarTipoDeServicio: any = (data?: any) => {
       try {
-        console.log({ data })
-        // requestServices.value.distancia         = data.routes[0].legs[0].distance;
-        // requestServices.value.tiempo            = data.routes[0].legs[0].duration;
-        // requestServices.value.inicio.direccion  = data.routes[0].legs[0].start_address; 
-        // requestServices.value.inicio.LtnLng     = data.routes[0].legs[0].start_location.toJSON();
-        // requestServices.value.final.direccion   = data.routes[0].legs[0].end_address;
-        // requestServices.value.final.LtnLng      = data.routes[0].legs[0].end_location.toJSON();
-        // requestServices.value.costo_servicio    = (data.routes[0].legs[0].distance.value * 1000) / 1000;
+        requestServices.value.distancia = data.routes[0].legs[0].distance;
+        requestServices.value.tiempo = data.routes[0].legs[0].duration;
+        requestServices.value.inicio.direccion =
+          data.routes[0].legs[0].start_address;
+        requestServices.value.inicio.LtnLng =
+          data.routes[0].legs[0].start_location.toJSON();
+        requestServices.value.final.direccion =
+          data.routes[0].legs[0].end_address;
+        requestServices.value.final.LtnLng =
+          data.routes[0].legs[0].end_location.toJSON();
+        requestServices.value.costo_servicio =
+          (data.routes[0].legs[0].distance.value * 1000) / 1000;
 
         OpenModalOpcionesDeViaje();
       } catch (e) {
@@ -596,14 +670,21 @@ export default defineComponent({
 
     const getIfExistRequestUser: any = async () => {
       const StoreRequest: any = await Storage.get({ key: "drive-user" });
-      if (StoreRequest.value) {
-        var_computed_solicitud_usuario.value = JSON.parse(StoreRequest.value);
-      }
+      var_computed_solicitud_usuario.value = JSON.parse(StoreRequest.value);
     };
+    const DeleteIfExistRequestUser: any = async () => {
+      const StoreRequest: any = await Storage.remove({ key: "drive-user" });
+    };
+
+    const myPromise = new Promise((resolve, reject) => {
+      setInterval(() => {
+        resolve(getIfExistRequestUser());
+      }, 300);
+    });
 
     onMounted(() => {
       initMap();
-      getIfExistRequestUser();
+      myPromise;
     });
 
     onIonViewWillEnter(() => {
@@ -634,7 +715,8 @@ export default defineComponent({
       ConfirmarRuta,
       SeleccionarTipoDeServicio,
       customPopoverOptions,
-      slideOpts
+      slideOpts,
+      DeleteIfExistRequestUser,
     };
   },
   methods: {

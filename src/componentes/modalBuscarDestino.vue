@@ -69,7 +69,7 @@ import import_var_modalObcionesDeViaje from '../componentes/modalOpcionesDeViaje
 // eslint-disable-next-line
 var EndFlag = require('../../public/assets/icon/flag.png')
 // eslint-disable-next-line
-var BlackDotPulse = require('../../public/assets/icon/black-dot-pulse.gif')
+var GreenDotPulse = require('../../public/assets/icon/green-dot-pulse.gif')
 
 export default defineComponent({
     name: 'ModalDF',
@@ -206,8 +206,8 @@ export default defineComponent({
 
                         // flightPath.setMap(map.value);
                        
-                        const bird_icon = {
-                            url: BlackDotPulse,
+                        const start = {
+                            url: GreenDotPulse,
                             size: new google.value.maps.Size(40, 40),
                             origin: new google.value.maps.Point(0, 0),
                             anchor: new google.value.maps.Point(20, 40),
@@ -224,7 +224,7 @@ export default defineComponent({
                         new google.value.maps.Marker({
                             position: response.routes[0].overview_path[0].toJSON(),
                             map: map.value,
-                            icon: bird_icon
+                            icon: start
                         });
                         new google.value.maps.Marker({
                             position: response.routes[0].overview_path[response.routes[0].overview_path.length - 1].toJSON(),
