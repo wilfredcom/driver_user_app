@@ -63,77 +63,19 @@
               Cancelar Servicio
             </ion-button>
           </ion-card-header>
-          <!-- <ion-card-header>
-            <ion-card-title>Conductor</ion-card-title>
-          </ion-card-header> -->
-          <!-- <ion-card-content>
-            <ion-item v-if="DataAnswereService.drive != null">
-              <ion-avatar slot="start">
-                <img src="https://gravatar.com/avatar/dba6bae8c566f9d4041fb9cd9ada7741?d=identicon&f=y" />
-              </ion-avatar>
-              <ion-label>
-                <h2>
-                  Nombre:
-                  {{ JSON.parse(DataAnswereService.drive).name.toUpperCase() }}
-                </h2>
-                <h3 style="position: relative; top: -5px">
-                  Id: {{ JSON.parse(DataAnswereService.drive).id }}
-                </h3>
-                <p style="position: absolute; top: 45px">
-                  Carro:
-                  {{ JSON.parse(DataAnswereService.drive).carro.toUpperCase() }}
-                </p>
-                <p style="position: relative; top: 6px">
-                  Placa:
-                  {{ JSON.parse(DataAnswereService.drive).placa.toUpperCase() }}
-                </p>
-              </ion-label>
-            </ion-item>
-            <p style="text-align: right" v-if="DataAnswereService.drive != null">
-              <ion-chip color="danger">
-                <ion-icon name="heart-outline"></ion-icon>
-                <ion-badge color="primary">{{
-                JSON.parse(DataAnswereService.drive).likes
-                }}</ion-badge>
-              </ion-chip>
-              <ion-chip color="dark">
-                <ion-icon name="chatbubble-ellipses-outline"></ion-icon>
-                <ion-badge color="primary">{{ JSON.parse(DataAnswereService.drive).comentarios.length }}
-                </ion-badge>
-              </ion-chip>
-              <ion-chip color="primary">
-                <ion-icon name="car-outline"></ion-icon>
-                <ion-badge color="primary">{{ JSON.parse(DataAnswereService.drive).count_drives }}
-                </ion-badge>
-              </ion-chip>
-            </p>
-            <p style="text-align: center">
-              <ion-chip color="danger">
-                <ion-label>Rechazar</ion-label>
-                <ion-icon name="close-circle"></ion-icon>
-              </ion-chip>
-              <ion-chip color="success" v-if="DataAnswereService.drive != null" @click="AcepteDrive()">
-                <ion-label>Aceptar</ion-label>
-                <ion-icon name="checkmark-circle"></ion-icon>
-              </ion-chip>
-              <ion-chip v-show="DataAnswereService.drive != null">
-                <ion-label>Mensaje</ion-label>
-                <ion-icon name="paper-plane-outline"></ion-icon>
-              </ion-chip>
-            </p>
-          </ion-card-content> -->
         </ion-card>
       </div>
       <div id="container" style="width: 100%; height: 100%; z-index: 1">
         <div id="map" class="map"></div>
         <div class="float-div-mapper">
-          <ion-button color="warning" @click="isOpen = !isOpen" expand="block">
+          <ion-button color="warning" @click="var_computed_modalAdondeQuieresIr = !var_computed_modalAdondeQuieresIr" expand="block">
             ¿A donde quieres ir?
           </ion-button>
         </div>
       </div>
+      <!-- modal seleccionar inicio/fin destino -->
       <ion-modal
-        :is-open="isOpen"
+        :is-open="var_computed_modalAdondeQuieresIr"
         :initial-breakpoint="0.75"
         :breakpoints="[0.75, 0.5, 0.75]"
         :backdrop-breakpoint="0.5"
@@ -141,7 +83,7 @@
         <ion-header>
           <ion-toolbar>
             <ion-buttons slot="end">
-              <ion-button @click="setOpen(false)">
+              <ion-button @click="var_computed_modalAdondeQuieresIr = !var_computed_modalAdondeQuieresIr">
                 <img
                   src="https://img.icons8.com/ios/30/000000/circled-left.png"
                 />
@@ -252,6 +194,89 @@
           </ion-content>
         </ion-content>
       </ion-modal>
+      <!-- modal Seleccionar tipo de servicio -->
+      <ion-modal
+        :is-open="var_computed_SeleccionarTipoDeViaje"
+        :initial-breakpoint="0.85"
+        :breakpoints="[0.85, 0.8, 0.85]"
+        :backdrop-breakpoint="0.8"
+      >
+        <ion-header>
+          <ion-toolbar>
+            <ion-buttons slot="end">
+              <ion-button @click="var_computed_SeleccionarTipoDeViaje = !var_computed_SeleccionarTipoDeViaje">
+                <img
+                  src="https://img.icons8.com/ios/30/000000/circled-left.png"
+                />
+              </ion-button>
+            </ion-buttons>
+          </ion-toolbar>
+        </ion-header>
+        <ion-content :fullscreen="true" class="h-screen">
+            <ion-header collapse="condense">
+                <ion-toolbar>
+                    <ion-title size="large"></ion-title>
+                </ion-toolbar>
+            </ion-header>
+            <div
+                class="m-4 max-h-fit max-w-full  text-[#fff] p-2 shadow-[0_10px_10px_1px_rgba(0,0,0,0.3)] relative rounded-lg ">
+                <div class="grid grid-cols-12">
+                    <div class="col-span-2">
+                        <img src="https://img.icons8.com/stickers/100/000000/car-theft.png" />
+                    </div>
+                    <div class="col-span-10  mt-2 ml-2">
+                        <div class=" text-center  uppercase text-[#000] text-3xl font-bold align-middle mb-5 ">
+                            <p>taxi</p>
+                        </div>
+                        <div class=" text-left divide-y uppercase text-[#cecece] text-xs font-bold align-middle mb-2 ">
+                            <p>Inicio: {{ requestServices.inicio.direccion }} </p>
+                            <p>Destino: {{ requestServices.final.direccion }} </p>
+                            <p>Tiempo(Aprox): {{ requestServices.tiempo.text }} </p>
+                            <p>Km.: {{ requestServices.distancia.text }} </p>
+                        </div>
+                    </div>
+                    <div class="col-span-12  text-[#000] align-middle text-center self-center font-bold ml-2">
+                        <button
+                            class="mt-2 mb-2 w-full  bg-green-300 p-2 rounded-xl hover:bg-green-500  text-white font-semibold"
+                            @click="servicioSelected('taxi')">
+                            <p>Solicitar</p>
+                            <p> ${{ Intl.NumberFormat().format(requestServices.costo_servicio) }}</p>
+                        </button>
+                    </div>
+                </div>
+            </div>
+            <div
+                class="m-4 max-h-fit max-w-full  text-[#fff] p-2 shadow-[0_10px_10px_1px_rgba(0,0,0,0.3)] relative rounded-lg ">
+                <div class="grid grid-cols-12">
+                    <div class="col-span-2 ">
+                        <img
+                            src="https://img.icons8.com/external-flaticons-lineal-color-flat-icons/64/000000/external-delivery-tools-and-material-ecommerce-flaticons-lineal-color-flat-icons-2.png" />
+                    </div>
+                    <div class="col-span-10  mt-2 ml-2">
+                        <div class=" text-left  uppercase text-[#000] text-2xl font-bold align-middle mb-5 ">
+                            <p>envio de paquetes</p>
+                        </div>
+                        <div class=" divide-y text-left  uppercase text-[#cecece] text-xs font-bold align-middle mb-2 ">
+                             <p>Inicio: {{ requestServices.inicio.direccion }} </p>
+                             <p>Destino: {{ requestServices.final.direccion }} </p>
+                            <p>Tiempo(Aprox): {{ requestServices.tiempo.text }} </p>
+                            <p>Km.: {{ requestServices.distancia.text }} </p>
+                        </div>
+                    </div>
+                    <div class="col-span-12  text-[#000] align-middle text-center self-center font-bold ml-2">
+                        <button
+                            class="mt-2 mb-2 w-full  bg-green-300 p-2 rounded-xl hover:bg-green-500  text-white font-semibold"
+                            @click="servicioSelected('envio_paquete')">
+                            <p>Solicitar</p>
+                            <p> ${{ Intl.NumberFormat(['ban', 'id']).format(requestServices.costo_servicio) }}</p>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </ion-content>
+      </ion-modal>
+
+
     </ion-content>
   </ion-page>
 </template>
@@ -302,6 +327,7 @@ import {
 var EndFlag = require("../../public/assets/icon/flag.png");
 var GreenkDotPulse = require("../../public/assets/icon/green-dot-pulse.gif");
 const standingMan = require("../../public/assets/icon/standing-man.png");
+import axios from 'axios'
 
 export default defineComponent({
   name: "FolderPage",
@@ -430,7 +456,26 @@ export default defineComponent({
         store.commit("setOpenModalOpcionesDeViaje", val);
       },
     });
-
+    const var_computed_modalAdondeQuieresIr: any = computed({
+      get: () => {
+        return store.getters.modal_a_donde_quieres_ir;
+      },
+      set: (val: any) => {
+        store.commit("setModalADondeQuieresIr", val);
+      },
+    });
+    const var_computed_SeleccionarTipoDeViaje: any = computed({
+      get: () => {
+        return store.getters.modal_a_seleccionar_tipo_de_viaje;
+      },
+      set: (val: any) => {
+        store.commit("setModalSeleccionarTipoDeViaje", val);
+      },
+    });
+    const User: any = computed({
+            get: () => { return store.getters.user },
+            set: (val: any) => { store.commit('setUser', val) }
+        });
     const customPopoverOptions = {
       header: "Metodo de pago",
       subHeader: "",
@@ -522,10 +567,9 @@ export default defineComponent({
     const ConfirmarRuta: any = async () => {
       try {
         const directionsService = new google.value.maps.DirectionsService();
-        const directionsRenderer = new google.value.maps.DirectionsRenderer({
-          suppressMarkers: true,
-        });
+        const directionsRenderer = new google.value.maps.DirectionsRenderer({ suppressMarkers: true});
         directionsRenderer.setMap(map.value);
+
         const response = await directionsService.route({
           origin: { query: searchAddressPI.value.name },
           destination: { query: searchAddressPF.value.name },
@@ -547,19 +591,8 @@ export default defineComponent({
         };
 
         await directionsRenderer.setDirections(response);
-        new google.value.maps.Marker({
-          position: response.routes[0].overview_path[0].toJSON(),
-          map: map.value,
-          icon: start,
-        });
-        new google.value.maps.Marker({
-          position:
-            response.routes[0].overview_path[
-              response.routes[0].overview_path.length - 1
-            ].toJSON(),
-          map: map.value,
-          icon: end,
-        });
+        new google.value.maps.Marker({ position: response.routes[0].overview_path[0].toJSON(), map: map.value, icon: start});
+        new google.value.maps.Marker({ position: response.routes[0].overview_path[response.routes[0].overview_path.length - 1].toJSON(), map: map.value, icon: end});
         await SeleccionarTipoDeServicio(response);
       } catch (error) {
         openToast(error);
@@ -570,16 +603,11 @@ export default defineComponent({
       try {
         requestServices.value.distancia = data.routes[0].legs[0].distance;
         requestServices.value.tiempo = data.routes[0].legs[0].duration;
-        requestServices.value.inicio.direccion =
-          data.routes[0].legs[0].start_address;
-        requestServices.value.inicio.LtnLng =
-          data.routes[0].legs[0].start_location.toJSON();
-        requestServices.value.final.direccion =
-          data.routes[0].legs[0].end_address;
-        requestServices.value.final.LtnLng =
-          data.routes[0].legs[0].end_location.toJSON();
-        requestServices.value.costo_servicio =
-          (data.routes[0].legs[0].distance.value * 1000) / 1000;
+        requestServices.value.inicio.direccion = data.routes[0].legs[0].start_address;
+        requestServices.value.inicio.LtnLng = data.routes[0].legs[0].start_location.toJSON();
+        requestServices.value.final.direccion = data.routes[0].legs[0].end_address;
+        requestServices.value.final.LtnLng = data.routes[0].legs[0].end_location.toJSON();
+        requestServices.value.costo_servicio = (data.routes[0].legs[0].distance.value * 1000) / 1000;
 
         OpenModalOpcionesDeViaje();
       } catch (e) {
@@ -588,12 +616,7 @@ export default defineComponent({
       }
     };
     const OpenModalOpcionesDeViaje = async () => {
-      var_computed_modalOpcionesDeViaje.value = await modalController.create({
-        component: import_var_modalObcionesDeViaje,
-        initialBreakpoint: 0.5,
-        breakpoints: [0, 0.5, 1],
-      });
-      return var_computed_modalOpcionesDeViaje.value.present();
+      var_computed_SeleccionarTipoDeViaje.value = true;
     };
     // triggers
     const openModal = async () => {
@@ -673,8 +696,65 @@ export default defineComponent({
       var_computed_solicitud_usuario.value = JSON.parse(StoreRequest.value);
     };
     const DeleteIfExistRequestUser: any = async () => {
-      const StoreRequest: any = await Storage.remove({ key: "drive-user" });
-    };
+      const GetStoreRequest: any = await Storage.get({ key: "drive-user" });
+      var parseStore = JSON.parse(GetStoreRequest.value);
+      const GetUserlogin: any = await Storage.get({ key: "user_login" });
+      var parseUserLogin = JSON.parse(GetUserlogin.value);
+      var model = {
+        estado: 'Servicio Cancelado',
+        user_id: parseUserLogin.user.id
+      }
+      let { data }: any = await axios.post(`http://localhost:8000/api/cancel-servicio/${parseStore.s.id}`, model )
+      await Storage.remove({ key: "drive-user" });
+      initMap()
+    }
+
+    const servicioSelected: any = async (dataS?: any) => {
+
+            try {
+                ServicioSolicitado.value.type_solicitud = dataS, // taxi || envio de paquetes
+                ServicioSolicitado.value.inicio_ruta_coords = requestServices.value.inicio.LtnLng,
+                ServicioSolicitado.value.final_ruta_coords = requestServices.value.final.LtnLng,
+                ServicioSolicitado.value.inicio_ruta_address = requestServices.value.inicio.direccion,
+                ServicioSolicitado.value.final_ruta_address = requestServices.value.final.direccion,
+                ServicioSolicitado.value.distancia_servicio = requestServices.value.distancia,// en kilometros/metros
+                ServicioSolicitado.value.tiempo_aproximado_de_viaje = requestServices.value.tiempo,// minutos
+                ServicioSolicitado.value.costo = requestServices.value.costo_servicio,
+                // // ServicioSolicitado.value.mensajes = [],
+                ServicioSolicitado.value.estado = "solicitando servicio"; // solicitando servicio || servicio aceptado  || servicio iniciado || servicio finalizado 
+                ServicioSolicitado.value.user_id = User.value.id
+
+                // if (dataS == 'envio_paquete') return OpenModalEnvioDePaquetes()
+
+                // var_computed_modalOpcionesDeViaje.value.dismiss().then(() => {
+                    //     var_computed_modalOpcionesDeViaje.value = null;
+                // });
+
+                // modalPrincipal.value.dismiss().then(() => {
+                    //     modalPrincipal.value = null;
+                // });
+                
+
+                let { data }: any = await axios.post('http://localhost:8000/api/store-servicio', { ...ServicioSolicitado.value })
+
+                await Storage.set({
+                    key: 'drive-user',
+                    value: JSON.stringify({ estado: ServicioSolicitado.value.estado, id: data.id, s: data }),
+                });
+                var_computed_SeleccionarTipoDeViaje.value = false
+                var_computed_modalAdondeQuieresIr.value = false
+            } catch (e: any)  {
+                const toast = await toastController.create({
+                    header: "¡Error!",
+                    message: e.response.data.message,
+                    position: "top",
+                    duration: 2000,
+                    color: "danger",
+                    icon: 'alert-circle-outline'
+                });
+                await toast.present();
+            }
+        }
 
     const myPromise = new Promise((resolve, reject) => {
       setInterval(() => {
@@ -717,6 +797,10 @@ export default defineComponent({
       customPopoverOptions,
       slideOpts,
       DeleteIfExistRequestUser,
+      var_computed_modalAdondeQuieresIr,
+      var_computed_SeleccionarTipoDeViaje,
+      servicioSelected,
+      requestServices
     };
   },
   methods: {

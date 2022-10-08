@@ -91,8 +91,7 @@ import {
 import { useStore } from 'vuex'
 import axios from 'axios'
 import import_var_envio_de_paquetes from '../componentes/modalEnvioDePaquetes.vue'
-axios.defaults.headers.common['X-Requested-With'] = 'XMLHttpRequest';
-axios.defaults.headers.common['Access-Control-Allow-Origin'] = '*';
+
 
 export default defineComponent({
     components: {
@@ -105,14 +104,14 @@ export default defineComponent({
         IonTitle
     },
     setup() {
-        let google: any = computed({
-            get: () => { return store.getters.google },
-            set: (val: any) => { store.commit('setGoogle', val) }
-        });
-        const loader: any = computed({
-            get: () => { return store.getters.loader },
-            set: (val) => { store.commit('setLoader', val) }
-        });
+        // let google: any = computed({
+        //     get: () => { return store.getters.google },
+        //     set: (val: any) => { store.commit('setGoogle', val) }
+        // });
+        // const loader: any = computed({
+        //     get: () => { return store.getters.loader },
+        //     set: (val) => { store.commit('setLoader', val) }
+        // });
         const store: any = useStore();
         // const model_servicio: any = computed({
         //     get: () => { return store.getters.mis_viajes },
@@ -133,15 +132,15 @@ export default defineComponent({
         //     get: () => { return store.getters.mis_viajes },
         //     set: (val: any) => { store.commit('setMisViajes', val) }
         // });
-        let searchAddressPI: any = computed({
-            get: () => { return store.getters.searchAddressPI },
-            set: (val: any) => { store.commit('setsearchAddressPI', val) }
-        });
+        // let searchAddressPI: any = computed({
+        //     get: () => { return store.getters.searchAddressPI },
+        //     set: (val: any) => { store.commit('setsearchAddressPI', val) }
+        // });
 
-        let var_computed_modalOpcionesDeViaje: any = computed({
-            get: () => { return store.getters.openModalOpcionesDeViaje },
-            set: (val: any) => { store.commit('setOpenModalOpcionesDeViaje', val) }
-        });
+        // let var_computed_modalOpcionesDeViaje: any = computed({
+        //     get: () => { return store.getters.openModalOpcionesDeViaje },
+        //     set: (val: any) => { store.commit('setOpenModalOpcionesDeViaje', val) }
+        // });
 
         let User: any = computed({
             get: () => { return store.getters.user },
@@ -153,10 +152,10 @@ export default defineComponent({
             set: (val: any) => { store.commit('setMap', val) }
         });
 
-        let modalPrincipal: any = computed({
-            get: () => { return store.getters.openModal },
-            set: (val: any) => { store.commit('setOpenModal', val) }
-        });
+        // let modalPrincipal: any = computed({
+        //     get: () => { return store.getters.openModal },
+        //     set: (val: any) => { store.commit('setOpenModal', val) }
+        // });
 
         let var_computed_envio_de_paquetes: any = computed({
             get: () => { return store.getters.openModalEnvioDePaquetes },
@@ -188,7 +187,6 @@ export default defineComponent({
                     //     modalPrincipal.value = null;
                 // });
                 
-                console.log({ServicioSolicitado:ServicioSolicitado.value})
 
                 let { data }: any = await axios.post('http://localhost:8000/api/store-servicio', { ...ServicioSolicitado.value })
 

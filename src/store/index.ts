@@ -94,6 +94,8 @@ export default createStore({
         mis_viajes: [],
         user: {},
         solicitud_Usuario:{},
+        modal_a_donde_quieres_ir: false,
+        modal_a_seleccionar_tipo_de_viaje: false,
     },
     getters: {
         modelDataRequestServices: state => state.modelDataRequestServices,
@@ -112,6 +114,8 @@ export default createStore({
         mis_viajes: state => state.mis_viajes,
         user: state => state.user,
         solicitud_Usuario: state => state.solicitud_Usuario,
+        modal_a_donde_quieres_ir: state => state.modal_a_donde_quieres_ir,
+        modal_a_seleccionar_tipo_de_viaje: state => state.modal_a_seleccionar_tipo_de_viaje,
 
     },
     mutations: {
@@ -162,7 +166,13 @@ export default createStore({
         },
         setMap(state, data) {
             state.Map = data
-        }
+        },
+        setModalADondeQuieresIr(state, data){
+        state.modal_a_donde_quieres_ir = data;
+        },
+        setModalSeleccionarTipoDeViaje(state, data){
+        state.modal_a_seleccionar_tipo_de_viaje = data;
+        },
 
     },
 })
