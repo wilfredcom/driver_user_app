@@ -68,7 +68,10 @@
       <div id="container" style="width: 100%; height: 100%; z-index: 1">
         <div id="map" class="map"></div>
         <div class="float-div-mapper">
-          <ion-button color="warning" @click="var_computed_modalAdondeQuieresIr = !var_computed_modalAdondeQuieresIr" expand="block">
+          <ion-button  
+            :disabled=" var_computed_solicitud_usuario != null && Object.entries(var_computed_solicitud_usuario).length > 0" 
+            color="warning" @click="var_computed_modalAdondeQuieresIr = !var_computed_modalAdondeQuieresIr" 
+            expand="block">
             ¿A donde quieres ir?
           </ion-button>
         </div>

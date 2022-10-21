@@ -74,11 +74,11 @@ export default defineComponent({
         const StoreAndLoginToken: any = async () => {
             try {
 
-                await axios.post('http://localhost:8000/login', {
+                await axios.post('http://192.168.1.6:8000/login', {
                     email: model_user.value.email,
                     password: model_user.value.password
                 })
-                let { data }: any = await axios.post('http://localhost:8000/api/get-user', { email: model_user.value.email })
+                let { data }: any = await axios.post('http://192.168.1.6:8000/api/get-user', { email: model_user.value.email })
                 User.value = data
                 await Storage.set({key: "user_login", value: JSON.stringify({user: User.value})})
                 const toast = await toastController.create({
@@ -94,7 +94,7 @@ export default defineComponent({
             } catch (e: any) {
                 const toast = await toastController.create({
                     header: "¡Advertencia!",
-                    message: e.response.data.message,
+                    message: e,
                     position: "top",
                     duration: 6000,
                     color: "danger",

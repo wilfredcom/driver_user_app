@@ -104,58 +104,19 @@ export default defineComponent({
         IonTitle
     },
     setup() {
-        // let google: any = computed({
-        //     get: () => { return store.getters.google },
-        //     set: (val: any) => { store.commit('setGoogle', val) }
-        // });
-        // const loader: any = computed({
-        //     get: () => { return store.getters.loader },
-        //     set: (val) => { store.commit('setLoader', val) }
-        // });
         const store: any = useStore();
-        // const model_servicio: any = computed({
-        //     get: () => { return store.getters.mis_viajes },
-        //     set: (val: any) => { store.commit('setSolicitudUser', val) }
-        // });
-
         let requestServices: any = computed({
             get: () => { return store.getters.modelDataRequestServices },
             set: (val: any) => { store.commit('setModelDataRequestServices', val) }
         });
-
         let ServicioSolicitado: any = computed({
             get: () => { return store.getters.solicitud_user },
             set: (val: any) => { store.commit('setSolicitudUser', val) }
         });
-
-        // let MisViajes: any = computed({
-        //     get: () => { return store.getters.mis_viajes },
-        //     set: (val: any) => { store.commit('setMisViajes', val) }
-        // });
-        // let searchAddressPI: any = computed({
-        //     get: () => { return store.getters.searchAddressPI },
-        //     set: (val: any) => { store.commit('setsearchAddressPI', val) }
-        // });
-
-        // let var_computed_modalOpcionesDeViaje: any = computed({
-        //     get: () => { return store.getters.openModalOpcionesDeViaje },
-        //     set: (val: any) => { store.commit('setOpenModalOpcionesDeViaje', val) }
-        // });
-
         let User: any = computed({
             get: () => { return store.getters.user },
             set: (val: any) => { store.commit('setUser', val) }
         });
-
-        let map: any = computed({
-            get: () => { return store.getters.Map },
-            set: (val: any) => { store.commit('setMap', val) }
-        });
-
-        // let modalPrincipal: any = computed({
-        //     get: () => { return store.getters.openModal },
-        //     set: (val: any) => { store.commit('setOpenModal', val) }
-        // });
 
         let var_computed_envio_de_paquetes: any = computed({
             get: () => { return store.getters.openModalEnvioDePaquetes },
@@ -173,23 +134,9 @@ export default defineComponent({
                 ServicioSolicitado.value.distancia_servicio = requestServices.value.distancia,// en kilometros/metros
                 ServicioSolicitado.value.tiempo_aproximado_de_viaje = requestServices.value.tiempo,// minutos
                 ServicioSolicitado.value.costo = requestServices.value.costo_servicio,
-                // // ServicioSolicitado.value.mensajes = [],
                 ServicioSolicitado.value.estado = "solicitando servicio"; // solicitando servicio || servicio aceptado  || servicio iniciado || servicio finalizado 
                 ServicioSolicitado.value.user_id = User.value.id
-
-                // if (dataS == 'envio_paquete') return OpenModalEnvioDePaquetes()
-
-                // var_computed_modalOpcionesDeViaje.value.dismiss().then(() => {
-                    //     var_computed_modalOpcionesDeViaje.value = null;
-                // });
-
-                // modalPrincipal.value.dismiss().then(() => {
-                    //     modalPrincipal.value = null;
-                // });
-                
-
                 let { data }: any = await axios.post('http://localhost:8000/api/store-servicio', { ...ServicioSolicitado.value })
-
                 await Storage.set({
                     key: 'drive-user',
                     value: JSON.stringify({ estado: ServicioSolicitado.value.estado, id: data.id, s: data }),
