@@ -96,6 +96,13 @@ export default createStore({
         solicitud_Usuario:{},
         modal_a_donde_quieres_ir: false,
         modal_a_seleccionar_tipo_de_viaje: false,
+        metodo_de_pago: {
+            tipo_metodo: 'Efectivo', // efectivo || tarjeta,
+            nombre_titular: '',
+            numero_de_tarjeta: '',
+            fecha_vencimiento: '',
+            codigo_de_seguridad: ''
+        }
     },
     getters: {
         modelDataRequestServices: state => state.modelDataRequestServices,
@@ -116,6 +123,7 @@ export default createStore({
         solicitud_Usuario: state => state.solicitud_Usuario,
         modal_a_donde_quieres_ir: state => state.modal_a_donde_quieres_ir,
         modal_a_seleccionar_tipo_de_viaje: state => state.modal_a_seleccionar_tipo_de_viaje,
+        metodo_de_pago: state => state.metodo_de_pago
 
     },
     mutations: {
@@ -173,6 +181,9 @@ export default createStore({
         setModalSeleccionarTipoDeViaje(state, data){
         state.modal_a_seleccionar_tipo_de_viaje = data;
         },
+        setMetodoDePago(state, data){
+            state.metodo_de_pago = data
+        }
 
     },
 })

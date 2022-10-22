@@ -79,9 +79,9 @@
       <!-- modal seleccionar inicio/fin destino -->
       <ion-modal
         :is-open="var_computed_modalAdondeQuieresIr"
-        :initial-breakpoint="0.75"
-        :breakpoints="[0.75, 0.5, 0.75]"
-        :backdrop-breakpoint="0.5"
+        :initial-breakpoint="1"
+        :breakpoints="[1, 1, 1]"
+        :backdrop-breakpoint="1"
       >
         <ion-header>
           <ion-toolbar>
@@ -114,17 +114,116 @@
             @ionChange="geocode2"
             v-model="searchAddressPF.name"
           />
-          <ion-item>
-            <ion-label>Metodo de pago</ion-label>
+           <ion-item class="my-2" >
+            <ion-label class="relative" >
+             <strong> Metodo de pago </strong>
+              <img class="float-right" v-if="var_computed_metodo_de_pago.tipo_metodo == 'efectivo'" src="https://img.icons8.com/dusk/25/000000/money--v1.png"  />
+              <img class="float-right" v-if="var_computed_metodo_de_pago.tipo_metodo == 'tarjeta'" src="https://img.icons8.com/color/25/000000/mastercard-credit-card.png"  />
+            </ion-label>
             <ion-select
               interface="popover"
-              placeholder="Selecione metodo de pago"
-              selectedText="Efectivo"
+              placeholder="Selecione"
+              v-model="var_computed_metodo_de_pago.tipo_metodo"
             >
-              <IonSelectOption value="efectivo"> Efectivo</IonSelectOption>
-              <IonSelectOption value="credito">Credito</IonSelectOption>
+              <IonSelectOption value="efectivo">Pago con efectivo</IonSelectOption>
+              <IonSelectOption value="tarjeta">Pago con tarjeta</IonSelectOption>
             </ion-select>
           </ion-item>
+
+          <div class="flex justify-center" v-if="var_computed_metodo_de_pago.tipo_metodo == 'tarjeta'" >
+            <ul class="bg-white  border border-gray-200 w-full text-gray-900 my-5 mx-0 ">
+              <li class="px-6 py-2 border-b border-t-0 border-l-0 border-gray-200 w-full  relative">
+                <div class="flex space-x-2 justify-right">
+                    <button type="button" class=" rounded-full bg-blue-600 text-white leading-normal uppercase shadow-md hover:bg-blue-700 hover:shadow-lg focus:bg-blue-700 focus:shadow-lg focus:outline-none focus:ring-0 active:bg-blue-800 active:shadow-lg transition duration-150 ease-in-out w-9 h-9">
+                      <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-3 mx-auto">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
+                      </svg>
+                    </button>
+                </div>
+                <p class="absolute top-3 left-20 " >Agregar tarjeta</p>
+              </li>
+              <!-- <li class="px-6 py-2 border-b border-gray-200 w-full">
+                <div class="form-check ml-3">
+                  <input class="form-check-input appearance-none h-4 w-4 border border-gray-300 rounded-sm bg-white checked:bg-blue-600 checked:border-blue-600 focus:outline-none transition duration-200 mt-1 align-top bg-no-repeat bg-center bg-contain float-left mr-2 cursor-pointer" type="checkbox" value="" id="flexCheckDefault">
+                  <label class="form-check-label inline-block text-gray-800" for="flexCheckDefault">
+                    Default checkbox
+                  </label>
+                </div>
+              </li>
+              <li class="px-6 py-2 border-b border-gray-200 w-full">
+                <div class="form-check ml-3">
+                  <input class="form-check-input appearance-none h-4 w-4 border border-gray-300 rounded-sm bg-white checked:bg-blue-600 checked:border-blue-600 focus:outline-none transition duration-200 mt-1 align-top bg-no-repeat bg-center bg-contain float-left mr-2 cursor-pointer" type="checkbox" value="" id="flexCheckDefault">
+                  <label class="form-check-label inline-block text-gray-800" for="flexCheckDefault">
+                    Default checkbox
+                  </label>
+                </div>
+              </li>
+              <li class="px-6 py-2 border-b border-gray-200 w-full">
+                <div class="form-check ml-3">
+                  <input class="form-check-input appearance-none h-4 w-4 border border-gray-300 rounded-sm bg-white checked:bg-blue-600 checked:border-blue-600 focus:outline-none transition duration-200 mt-1 align-top bg-no-repeat bg-center bg-contain float-left mr-2 cursor-pointer" type="checkbox" value="" id="flexCheckDefault">
+                  <label class="form-check-label inline-block text-gray-800" for="flexCheckDefault">
+                    Default checkbox
+                  </label>
+                </div>
+              </li> -->
+            </ul>
+          </div>
+
+          <!-- credit card from -->
+          <!-- <div class="w-96 h-56 m-auto bg-red-100 rounded-xl relative text-white shadow-2xl transition-transform transform hover:scale-110">
+                <img class="relative object-cover w-full h-full rounded-xl" src="https://i.imgur.com/kGkSg1v.png">
+                <div class="w-full px-8 absolute top-8">
+                    <div class="flex justify-between">
+                        <div class="">
+                            <p class="font-light">
+                                Name
+                            </p>
+                            <p class="font-medium tracking-widest">
+                                Karthik P
+                            </p>
+                        </div>
+                    </div>
+                    <div class="pt-1">
+                        <p class="font-light">
+                            Card Number
+                        </p>
+                        <p class="font-medium tracking-more-wider">
+                            4642  3489  9867  7632
+                        </p>
+                    </div>
+                    <div class="pt-6 pr-6">
+                        <div class="flex justify-between">
+                            <div class="">
+                                <p class="font-light text-xs">
+                                    Valid
+                                </p>
+                                <p class="font-medium tracking-wider text-sm">
+                                    11/15
+                                </p>
+                            </div>
+                            <div class="">
+                                <p class="font-light text-xs text-xs">
+                                    Expiry
+                                </p>
+                                <p class="font-medium tracking-wider text-sm">
+                                    03/25
+                                </p>
+                            </div>
+    
+                            <div class="">
+                                <p class="font-light text-xs">
+                                    CVV
+                                </p>
+                                <p class="font-bold tracking-more-wider text-sm">
+                                    ···
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+    
+                </div>
+          </div> -->
+          <!-- end credit card from -->
           <button
             type="button"
             @click="ConfirmarRuta"
@@ -278,7 +377,6 @@
             </div>
         </ion-content>
       </ion-modal>
-
 
     </ion-content>
   </ion-page>
@@ -475,6 +573,14 @@ export default defineComponent({
         store.commit("setModalSeleccionarTipoDeViaje", val);
       },
     });
+    const var_computed_metodo_de_pago: any = computed({
+      get: () => {
+        return store.getters.metodo_de_pago;
+      },
+      set: (val: any) => {
+        store.commit("setMetodoDePago", val);
+      },
+    });
     const User: any = computed({
             get: () => { return store.getters.user },
             set: (val: any) => { store.commit('setUser', val) }
@@ -484,7 +590,6 @@ export default defineComponent({
       subHeader: "",
       message: "",
     };
-
     const slideOpts = {
       initialSlide: 1,
       speed: 400,
@@ -803,7 +908,8 @@ export default defineComponent({
       var_computed_modalAdondeQuieresIr,
       var_computed_SeleccionarTipoDeViaje,
       servicioSelected,
-      requestServices
+      requestServices,
+      var_computed_metodo_de_pago
     };
   },
   methods: {
