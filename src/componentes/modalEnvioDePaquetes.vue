@@ -25,9 +25,7 @@
                     <div class="col-span-10  mt-2 ml-2">
                         <div class=" text-center  uppercase text-[#000] text-3xl font-bold align-middle mb-5 ">
                             <p>Formulario</p>
-                            <p class="text-lg">Costo Total: ${{ Intl.NumberFormat().format(
-                                    costo_final_envio_de_paquetes)
-                            }}</p>
+                            <p class="text-lg">Costo Total: ${{ Intl.NumberFormat().format( costo_final_envio_de_paquetes) }}</p>
                         </div>
                         <div class=" text-left divide-y uppercase text-[#cecece] text-xs font-bold align-middle mb-2 ">
                             <ion-item>
@@ -129,10 +127,7 @@ export default defineComponent({
         //     set: (val: any) => { store.commit('setMisViajes', val) }
         // });
 
-        let var_computed_modalOpcionesDeViaje: any = computed({
-            get: () => { return store.getters.openModalOpcionesDeViaje },
-            set: (val: any) => { store.commit('setOpenModalOpcionesDeViaje', val) }
-        });
+       
 
         let modalPrincipal: any = computed({
             get: () => { return store.getters.openModal },
@@ -178,9 +173,9 @@ export default defineComponent({
             ServicioSolicitado.value.paquete.descripcion = paquete.value.descripcion
             ServicioSolicitado.value.paquete.cantidad = paquete.value.cantidad
             ServicioSolicitado.value.user_id = User.value.id
-            var_computed_modalOpcionesDeViaje.value.dismiss().then(() => {
-                var_computed_modalOpcionesDeViaje.value = null;
-            });
+            // var_computed_modalOpcionesDeViaje.value.dismiss().then(() => {
+            //     var_computed_modalOpcionesDeViaje.value = null;
+            // });
 
             modalPrincipal.value.dismiss().then(() => {
                 modalPrincipal.value = null;

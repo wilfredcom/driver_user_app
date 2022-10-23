@@ -13,6 +13,7 @@
     </ion-header>
     <ion-content :fullscreen="true">
       <div class="float-div-mapper" style="top: 10%">
+        <!-- buscando conductor -->
         <ion-card>
           <ion-card-header
             v-if="
@@ -48,6 +49,18 @@
                 >
                 <img
                   src="/assets/icon/flag.png"
+                  style="position: absolute; width: 20px; top: 15px; left: 5px"
+                />
+              </ion-item>
+              <ion-item v-show="var_computed_solicitud_usuario.s.type_solicitud == 'envio_paquete'" >
+                <ion-label style="margin-left: 33px">
+                  <strong> Paquete:</strong>
+                  {{
+                    var_computed_solicitud_usuario.s.descripcion
+                  }}</ion-label
+                >
+                <img
+                  src="/assets/icon/cardboard-box.png"
                   style="position: absolute; width: 20px; top: 15px; left: 5px"
                 />
               </ion-item>
@@ -299,7 +312,7 @@
       <!-- modal Seleccionar tipo de servicio -->
       <ion-modal
         :is-open="var_computed_SeleccionarTipoDeViaje"
-        :initial-breakpoint="0.85"
+        :initial-breakpoint="0.75"
         :breakpoints="[0.85, 0.8, 0.85]"
         :backdrop-breakpoint="0.8"
       >
@@ -368,9 +381,86 @@
                     <div class="col-span-12  text-[#000] align-middle text-center self-center font-bold ml-2">
                         <button
                             class="mt-2 mb-2 w-full  bg-green-300 p-2 rounded-xl hover:bg-green-500  text-white font-semibold"
-                            @click="servicioSelected('envio_paquete')">
+                            @click="ServicioEnvioDePaquete('envio_paquete')">
                             <p>Solicitar</p>
                             <p> ${{ Intl.NumberFormat(['ban', 'id']).format(requestServices.costo_servicio) }}</p>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </ion-content>
+      </ion-modal>
+      <!-- modal Envio de paquetes -->
+      <ion-modal
+        :is-open="var_computed_EnvioDePaquetes"
+        :initial-breakpoint="0.75"
+        :breakpoints="[0.75, 0.7, 0.75]"
+        :backdrop-breakpoint="0.7"
+      >
+        <ion-header>
+          <ion-toolbar>
+            <ion-buttons slot="end">
+              <ion-button @click="var_computed_EnvioDePaquetes = !var_computed_EnvioDePaquetes">
+                <img
+                  src="https://img.icons8.com/ios/30/000000/circled-left.png"
+                />
+              </ion-button>
+            </ion-buttons>
+          </ion-toolbar>
+        </ion-header>
+        <ion-content :fullscreen="true" class="h-screen">
+            <ion-header collapse="condense">
+                  <ion-toolbar>
+                    <ion-buttons slot="end">
+                        <ion-button color="danger"><img src="https://img.icons8.com/ios/30/000000/circled-left.png" />
+                        </ion-button>
+                    </ion-buttons>
+                    <ion-title class="text-2xl"> Envio de Paquetes </ion-title>
+                  </ion-toolbar>
+            </ion-header>
+            <div class="m-4 max-h-fit max-w-full text-[#fff] p-2 shadow-[0_10px_10px_1px_rgba(0,0,0,0.3)] relative rounded-lg">
+                <div class="grid grid-cols-12">
+                    <div class="col-span-2">
+                        <img
+                            src="https://img.icons8.com/external-flaticons-lineal-color-flat-icons/64/000000/external-delivery-tools-and-material-ecommerce-flaticons-lineal-color-flat-icons-2.png" />
+                    </div>
+                    <div class="col-span-10  mt-2 ml-2">
+                        <div class=" text-center  uppercase text-[#000] text-3xl font-bold align-middle mb-5 ">
+                            <p>Formulario</p>
+                            <p class="text-lg">Costo Total: ${{ Intl.NumberFormat().format( costo_final_envio_de_paquetes) }}</p>
+                        </div>
+                        <div class=" text-left divide-y uppercase text-[#cecece] text-xs font-bold align-middle mb-2 ">
+                            <ion-item>
+                                <ion-label position="floating">Cantidad</ion-label>
+                                <ion-input type="number" v-model="paquete.cantidad"></ion-input>
+                            </ion-item>
+                            <ion-item>
+                                <ion-label position="floating">Alto(cm)</ion-label>
+                                <ion-input type="number" v-model="paquete.alto"></ion-input>
+                            </ion-item>
+                            <ion-item>
+                                <ion-label position="floating">Ancho(cm)</ion-label>
+                                <ion-input type="number" v-model="paquete.ancho"></ion-input>
+                            </ion-item>
+                            <ion-item>
+                                <ion-label position="floating">Largo(cm)</ion-label>
+                                <ion-input type="number" v-model="paquete.largo"></ion-input>
+                            </ion-item>
+                            <ion-item>
+                                <ion-label position="floating">Peso(g)</ion-label>
+                                <ion-input type="number" v-model="paquete.peso"></ion-input>
+                            </ion-item>
+                            <ion-item>
+                                <ion-label position="floating">Descripción</ion-label>
+                                <ion-textarea v-model="paquete.descripcion"></ion-textarea>
+                            </ion-item>
+                        </div>
+                    </div>
+                    <div class="col-span-12  text-[#000] align-middle text-center self-center font-bold ml-2">
+                        <button
+                            class="mt-2 mb-2 w-full  bg-green-300 p-2 rounded-xl hover:bg-green-500  text-white font-semibold"
+                            @click="ConfirmarEnvioDePaquete">
+                            <p>Solicitar</p>
                         </button>
                     </div>
                 </div>
@@ -387,7 +477,6 @@ import { defineComponent, computed, onMounted, ref } from "vue";
 import { informationCircle } from "ionicons/icons";
 import { Storage } from "@capacitor/storage";
 import { useStore } from "vuex";
-import import_var_modalObcionesDeViaje from "../componentes/modalOpcionesDeViajes.vue";
 import {
   IonListHeader,
   // IonChip,
@@ -423,6 +512,8 @@ import {
   // IonSlide,
   // IonRow,
   // IonCol,
+  IonTextarea,
+  IonInput
 } from "@ionic/vue";
 
 var EndFlag = require("../../public/assets/icon/flag.png");
@@ -463,6 +554,8 @@ export default defineComponent({
     // IonSlide,
     // IonRow,
     // IonCol,
+    IonTextarea,
+    IonInput,
   },
   data() {
     return {
@@ -549,7 +642,7 @@ export default defineComponent({
         store.commit("setModelDataRequestServices", val);
       },
     });
-    const var_computed_modalOpcionesDeViaje: any = computed({
+    const var_computed_EnvioDePaquetes: any = computed({
       get: () => {
         return store.getters.openModalOpcionesDeViaje;
       },
@@ -594,6 +687,28 @@ export default defineComponent({
       initialSlide: 1,
       speed: 400,
     };
+    const paquete: any = ref({
+          cantidad: 0,
+          alto: 0,
+          ancho: 0,
+          largo: 0,
+          peso: 0,
+          descripcion: ''
+      })
+    const costo_final_envio_de_paquetes: any = computed({
+          get: () => {
+              var costo: any = parseInt(requestServices.value.costo_servicio);
+              var cal = parseInt((costo + (
+                  paquete.value.cantidad *
+                  (parseInt(paquete.value.alto) + parseInt(paquete.value.ancho) + parseInt(paquete.value.largo) + parseInt(paquete.value.peso))
+              )
+              ))
+              return cal;
+          },
+          set: (val: any) => {
+              requestServices.value.costo = val
+          }
+    });
 
     /* metodos */
     const AcepteDrive = async () => {
@@ -812,7 +927,7 @@ export default defineComponent({
         estado: 'Servicio Cancelado',
         user_id: parseUserLogin.user.id
       }
-      let { data }: any = await axios.post(`http://localhost:8000/api/cancel-servicio/${parseStore.s.id}`, model )
+      let { data }: any = await axios.post(`http://192.168.1.6:8000/api/cancel-servicio/${parseStore.s.id}`, model )
       await Storage.remove({ key: "drive-user" });
       initMap()
     }
@@ -831,30 +946,40 @@ export default defineComponent({
                 // // ServicioSolicitado.value.mensajes = [],
                 ServicioSolicitado.value.estado = "solicitando servicio"; // solicitando servicio || servicio aceptado  || servicio iniciado || servicio finalizado 
                 ServicioSolicitado.value.user_id = User.value.id
-
-                // if (dataS == 'envio_paquete') return OpenModalEnvioDePaquetes()
-
-                // var_computed_modalOpcionesDeViaje.value.dismiss().then(() => {
-                    //     var_computed_modalOpcionesDeViaje.value = null;
-                // });
-
-                // modalPrincipal.value.dismiss().then(() => {
-                    //     modalPrincipal.value = null;
-                // });
                 
+                    let { data }: any = await axios.post('http://192.168.1.6:8000/api/store-servicio', { ...ServicioSolicitado.value })
+                      await Storage.set({
+                        key: 'drive-user',
+                          value: JSON.stringify({ estado: ServicioSolicitado.value.estado, id: data.id, s: data }),
+                      });
 
-                let { data }: any = await axios.post('http://localhost:8000/api/store-servicio', { ...ServicioSolicitado.value })
-
-                await Storage.set({
-                    key: 'drive-user',
-                    value: JSON.stringify({ estado: ServicioSolicitado.value.estado, id: data.id, s: data }),
-                });
-                var_computed_SeleccionarTipoDeViaje.value = false
-                var_computed_modalAdondeQuieresIr.value = false
+                    var_computed_SeleccionarTipoDeViaje.value = false
+                    var_computed_modalAdondeQuieresIr.value = false
+                    ServicioSolicitado.value  = {
+                      type_solicitud: '', // taxi || envio de paquetes
+                      inicio_ruta_coords: [],
+                      final_ruta_coords: [],
+                      inicio_ruta_address: '',
+                      final_ruta_address: '',
+                      distancia_servicio: null ,// en kilometros/metros
+                      tiempo_aproximado_de_viaje: null ,// minutos
+                      costo: 0,
+                      estado: null, // solicitando servicio || servicio aceptado  || servicio iniciado || servicio finalizado 
+                      // meta_data: null, // los datos que se generan cuando se consulta la api de google
+                      paquete: { // en tal caso que sea el servicio de tipo envio de paquetes
+                          alto: null,
+                          largo: null,
+                          ancho: null,
+                          peso: null,
+                          descripcion: null,
+                          cantidad: 0,
+                      },
+                      mensajes:[],
+                    }
             } catch (e: any)  {
                 const toast = await toastController.create({
                     header: "¡Error!",
-                    message: e.response.data.message,
+                    message: e,
                     position: "top",
                     duration: 2000,
                     color: "danger",
@@ -862,7 +987,73 @@ export default defineComponent({
                 });
                 await toast.present();
             }
+    }
+
+    const ServicioEnvioDePaquete: any = async (req?: any) => {
+      var_computed_SeleccionarTipoDeViaje.value = false
+      var_computed_EnvioDePaquetes.value = true;
+    }
+    const ConfirmarEnvioDePaquete: any = async ()  => {
+        try {
+            ServicioSolicitado.value.type_solicitud = 'envio_paquete', // taxi || envio de paquetes
+            ServicioSolicitado.value.inicio_ruta_coords = requestServices.value.inicio.LtnLng,
+            ServicioSolicitado.value.final_ruta_coords = requestServices.value.final.LtnLng,
+            ServicioSolicitado.value.inicio_ruta_address = requestServices.value.inicio.direccion,
+            ServicioSolicitado.value.final_ruta_address = requestServices.value.final.direccion,
+            ServicioSolicitado.value.distancia_servicio = requestServices.value.distancia,// en kilometros/metros
+            ServicioSolicitado.value.tiempo_aproximado_de_viaje = requestServices.value.tiempo,// minutos
+            ServicioSolicitado.value.costo = requestServices.value.costo_servicio,
+            ServicioSolicitado.value.estado = "solicitando servicio"; // solicitando servicio || servicio aceptado  || servicio iniciado || servicio finalizado 
+            ServicioSolicitado.value.user_id = User.value.id
+            ServicioSolicitado.value.paquete.alto = paquete.value.alto,
+            ServicioSolicitado.value.paquete.largo = paquete.value.largo,
+            ServicioSolicitado.value.paquete.ancho = paquete.value.ancho,
+            ServicioSolicitado.value.paquete.peso = paquete.value.peso,
+            ServicioSolicitado.value.paquete.descripcion = paquete.value.descripcion
+            ServicioSolicitado.value.paquete.cantidad = paquete.value.cantidad
+
+           let { data } = await axios.post('http://192.168.1.6:8000/api/store-servicio', { ...ServicioSolicitado.value })
+
+            await Storage.set({ key: 'drive-user', value: JSON.stringify({ estado: ServicioSolicitado.value.estado, id: data.id, s: data })});
+
+            var_computed_SeleccionarTipoDeViaje.value = false
+            var_computed_modalAdondeQuieresIr.value = false
+            var_computed_EnvioDePaquetes.value = false;
+            ServicioSolicitado.value  = {
+              type_solicitud: '', // taxi || envio de paquetes
+              inicio_ruta_coords: [],
+              final_ruta_coords: [],
+              inicio_ruta_address: '',
+              final_ruta_address: '',
+              distancia_servicio: null ,// en kilometros/metros
+              tiempo_aproximado_de_viaje: null ,// minutos
+              costo: 0,
+              estado: null, // solicitando servicio || servicio aceptado  || servicio iniciado || servicio finalizado 
+              // meta_data: null, // los datos que se generan cuando se consulta la api de google
+              paquete: { // en tal caso que sea el servicio de tipo envio de paquetes
+                  alto: null,
+                  largo: null,
+                  ancho: null,
+                  peso: null,
+                  descripcion: null,
+                  cantidad: 0,
+              },
+              mensajes:[],
+            }
+
+        } catch (e: any) {
+          const toast = await toastController.create({
+              header: "¡Error!",
+              message: e,
+              position: "top",
+              duration: 2000,
+              color: "danger",
+              icon: 'alert-circle-outline'
+          });
+          await toast.present();
         }
+          
+    }
 
     const myPromise = new Promise((resolve, reject) => {
       setInterval(() => {
@@ -909,7 +1100,12 @@ export default defineComponent({
       var_computed_SeleccionarTipoDeViaje,
       servicioSelected,
       requestServices,
-      var_computed_metodo_de_pago
+      var_computed_metodo_de_pago,
+      paquete,
+      var_computed_EnvioDePaquetes,
+      costo_final_envio_de_paquetes,
+      ServicioEnvioDePaquete,
+      ConfirmarEnvioDePaquete
     };
   },
   methods: {

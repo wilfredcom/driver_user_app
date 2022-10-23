@@ -2,8 +2,6 @@ import { createStore } from 'vuex'
 import { Loader } from "@googlemaps/js-api-loader"
 import { modalController } from '@ionic/vue';
 import Modal from '../componentes/modalBuscarDestino.vue'
-import ModalOpcionesDeviaje from '../componentes/modalOpcionesDeViajes.vue'
-import ModalEnvioDePaquetes from '../componentes/modalEnvioDePaquetes.vue'
  
 export default createStore({
     state: {
@@ -33,26 +31,8 @@ export default createStore({
                 })
             return modal.present();
         },
-        openModalOpcionesDeViaje: async () => {
-            
-             const modal = await modalController
-                .create({
-                    component: ModalOpcionesDeviaje,
-                    initialBreakpoint: 0.5,
-                    breakpoints: [0, 0.5, 1]
-                })
-            return modal.present();
-        },
-        openModalEnvioDePaquetes: async () => {
-            
-             const modal = await modalController
-                .create({
-                    component: ModalEnvioDePaquetes,
-                    initialBreakpoint: 0.9,
-                    breakpoints: [0, 0.5, 1]
-                })
-            return modal.present();
-        },
+        openModalOpcionesDeViaje: false,
+        openModalEnvioDePaquetes: false,
         modelDataRequestServices:{
             tipo_de_servicio: '',
             inicio: {
